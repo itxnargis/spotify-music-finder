@@ -13,13 +13,13 @@ const AudioAnalyzer: React.FC<AudioAnalyzerProps> = ({ audioFile, setAnalyzedSon
   const analyzeAudio = async () => {
     setIsAnalyzing(true);
     const formData = new FormData();
-    formData.append('upload_file', audioFile); // Change "file" to "upload_file"
+    formData.append('upload_file', audioFile);
 
     try {
       const response = await axios.post('https://shazam-api6.p.rapidapi.com/shazam/recognize/', formData, {
         headers: {
           'x-rapidapi-host': 'shazam-api6.p.rapidapi.com',
-          'x-rapidapi-key': import.meta.env.VITE_RAPID_API_KEY, // Fetch from env
+          'x-rapidapi-key': import.meta.env.VITE_RAPID_API_KEY,
         },
       });
 
@@ -31,11 +31,15 @@ const AudioAnalyzer: React.FC<AudioAnalyzerProps> = ({ audioFile, setAnalyzedSon
       } else {
         toast.error('Could not identify the song.');
       }
-    } catch (error) {
-      console.error('Error analyzing audio:', error.response ? error.response.data : error);
-      toast.error('Error analyzing audio. Please try again.');
-    } finally {
-      setIsAnalyzing(false);
+    }catch (error) {
+      setIsAnalyzing(false); 
+      if (axios.isAxiosError(error)) {
+        console.error('Error analyzing audio:', error.response?.data || error.message);
+        toast.error(error.response?.data?.message || 'Error analyzing audio. Please try again.');
+      } else {
+        console.error('Unexpected error:', error);
+        toast.error('An unexpected error occurred. Please try again.');
+      }
     }
   };
 

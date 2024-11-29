@@ -8,7 +8,6 @@ interface SpotifyPlayerProps {
 const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ songName }) => {
   const [trackId, setTrackId] = useState<string | null>(null);
 
-  // Function to get the Spotify access token
   const getSpotifyToken = async () => {
     try {
       const response = await axios.post(
@@ -21,7 +20,7 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ songName }) => {
             'Content-Type': 'application/x-www-form-urlencoded',
             Authorization: `Basic ${btoa(
               `${import.meta.env.VITE_SPOTIFY_CLIENT_ID}:${import.meta.env.VITE_SPOTIFY_CLIENT_SECRET}`
-            )}`, // base64(Client ID:Client Secret)
+            )}`,
           },
         }
       );

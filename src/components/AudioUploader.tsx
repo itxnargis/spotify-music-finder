@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { CloudArrowUpIcon } from '@heroicons/react/24/outline';
+import toast from 'react-hot-toast';
 
 interface AudioUploaderProps {
   setAudioFile: (file: File) => void;
