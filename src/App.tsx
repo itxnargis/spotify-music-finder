@@ -6,7 +6,7 @@ import { Toaster } from 'react-hot-toast';
 
 const App: React.FC = () => {
   const [audioFile, setAudioFile] = useState<File | null>(null);
-  const [analyzedSong, setAnalyzedSong] = useState<string | null>(null);
+  const [analyzedSong, setAnalyzedSong] = useState<{ title: string; artist: string } | null>(null);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-400 to-indigo-600 flex flex-col items-center justify-center p-4">

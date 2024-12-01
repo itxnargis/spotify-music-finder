@@ -1,8 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+interface Artist {
+  name: string | undefined;
+}
+
+interface Track {
+  id: string;
+  name: string | undefined;
+  artists: Artist[] | undefined;
+}
+
 interface SpotifyPlayerProps {
-  songName: string;
+  songName: { title: string; artist: string };
 }
 
 const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ songName }) => {
@@ -38,12 +48,37 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ songName }) => {
 
       try {
         const response = await axios.get('https://api.spotify.com/v1/search', {
-          params: { q: songName, type: 'track', limit: 1 },
+          params: { q: `${songName.title} ${songName.artist}`, type: 'track', limit: 5 },
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        if (response.data.tracks.items.length > 0) {
-          setTrackId(response.data.tracks.items[0].id);
+        const tracks: Track[] = response.data.tracks.items;
+
+        if (tracks.length === 0) {
+          console.error('No tracks found.');
+          return;
+        }
+
+        const matchedTrack = tracks.find(track => {
+          const trackName = track.name?.toLowerCase();
+          const artistNames = track.artists?.map(artist => artist.name?.toLowerCase()).filter(Boolean) || [];
+
+          if (!trackName || artistNames.length === 0) {
+            return false;
+          }
+
+          return (
+            trackName === songName.title.toLowerCase() &&
+            artistNames.some(artistName => artistName === songName.artist.toLowerCase())
+          );
+        });
+
+        if (matchedTrack) {
+          setTrackId(matchedTrack.id);
+        } else {
+          // If no exact match is found, use the first track
+          setTrackId(tracks[0].id);
+          console.log('No exact match found. Using the first search result.');
         }
       } catch (error) {
         console.error('Error searching Spotify:', error);

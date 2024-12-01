@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 
 interface AudioAnalyzerProps {
   audioFile: File;
-  setAnalyzedSong: (song: string) => void;
+  setAnalyzedSong: (song: { title: string; artist: string }) => void;
 }
 
 const AudioAnalyzer: React.FC<AudioAnalyzerProps> = ({ audioFile, setAnalyzedSong }) => {
@@ -26,13 +26,13 @@ const AudioAnalyzer: React.FC<AudioAnalyzerProps> = ({ audioFile, setAnalyzedSon
       const result = response.data;
       if (result.matches && result.matches.length > 0) {
         const match = result.matches[0];
-        setAnalyzedSong(`${match.artist} - ${match.title}`);
+        setAnalyzedSong({ title: match.title, artist: match.artist });
         toast.success('Song analyzed successfully!');
       } else {
         toast.error('Could not identify the song.');
       }
-    }catch (error) {
-      setIsAnalyzing(false); 
+    } catch (error) {
+      setIsAnalyzing(false);
       if (axios.isAxiosError(error)) {
         console.error('Error analyzing audio:', error.response?.data || error.message);
         toast.error(error.response?.data?.message || 'Error analyzing audio. Please try again.');
@@ -42,7 +42,6 @@ const AudioAnalyzer: React.FC<AudioAnalyzerProps> = ({ audioFile, setAnalyzedSon
       }
     }
   };
-
 
   return (
     <div className="mt-4">
