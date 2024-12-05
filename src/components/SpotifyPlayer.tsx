@@ -12,7 +12,7 @@ interface Track {
 }
 
 interface SpotifyPlayerProps {
-  songName: { title: string; artist: string };
+  songName: { title: string; subtitle: string; meta: object };
 }
 
 const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ songName }) => {
@@ -46,14 +46,16 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ songName }) => {
       const token = await getSpotifyToken();
       if (!token) return;
 
+      console.log(songName);
       try {
         const response = await axios.get('https://api.spotify.com/v1/search', {
-          params: { q: `${songName.title} ${songName.artist}`, type: 'track', limit: 5 },
+          params: { q: `${songName.title} ${songName.subtitle}`, type: 'track', limit: 5 },
           headers: { Authorization: `Bearer ${token}` },
         });
 
         const tracks: Track[] = response.data.tracks.items;
 
+        console.log(tracks);
         if (tracks.length === 0) {
           console.error('No tracks found.');
           return;
@@ -69,7 +71,7 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ songName }) => {
 
           return (
             trackName === songName.title.toLowerCase() &&
-            artistNames.some(artistName => artistName === songName.artist.toLowerCase())
+            artistNames.some(artistName => artistName === songName.subtitle.toLowerCase())
           );
         });
 

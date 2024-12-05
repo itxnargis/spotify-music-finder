@@ -26,7 +26,8 @@ const AudioAnalyzer: React.FC<AudioAnalyzerProps> = ({ audioFile, setAnalyzedSon
       const result = response.data;
       if (result.matches && result.matches.length > 0) {
         const match = result.matches[0];
-        setAnalyzedSong({ title: match.title, artist: match.artist });
+        const track = result.track;
+        setAnalyzedSong({ title: track.title, subtitle: track.subtitle, meta: track });
         toast.success('Song analyzed successfully!');
       } else {
         toast.error('Could not identify the song.');
