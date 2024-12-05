@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import AudioUploader from './components/AudioUploader';
 import AudioAnalyzer from './components/AudioAnalyzer';
 import SpotifyPlayer from './components/SpotifyPlayer';
