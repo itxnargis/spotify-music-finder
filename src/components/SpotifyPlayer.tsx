@@ -1,22 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 
 interface Artist {
-  name: string | undefined;
+  name: string | undefined
 }
 
 interface Track {
-  id: string;
-  name: string | undefined;
-  artists: Artist[] | undefined;
+  id: string
+  name: string | undefined
+  artists: Artist[] | undefined
 }
 
 interface SpotifyPlayerProps {
-  songName: { title: string; subtitle: string; meta: object };
+  songName: { title: string; subtitle: string; meta: object }
 }
 
-const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ songName }) => {
-  const [trackId, setTrackId] = useState<string | null>(null);
+export function SpotifyPlayer({ songName }: SpotifyPlayerProps) {
+  const [trackId, setTrackId] = useState<string | null>(null)
 
   const getSpotifyToken = async () => {
     try {
@@ -33,65 +33,66 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ songName }) => {
             )}`,
           },
         }
-      );
-      return response.data.access_token;
+      )
+      return response.data.access_token
     } catch (error) {
-      console.error('Error fetching Spotify token:', error);
-      return null;
+      console.error('Error fetching Spotify token:', error)
+      return null
     }
-  };
+  }
 
   useEffect(() => {
     const searchSpotify = async () => {
-      const token = await getSpotifyToken();
-      if (!token) return;
+      const token = await getSpotifyToken()
+      if (!token) return
 
-      console.log(songName);
       try {
         const response = await axios.get('https://api.spotify.com/v1/search', {
           params: { q: `${songName.title} ${songName.subtitle}`, type: 'track', limit: 5 },
           headers: { Authorization: `Bearer ${token}` },
-        });
+        })
 
-        const tracks: Track[] = response.data.tracks.items;
+        const tracks: Track[] = response.data.tracks.items
 
-        console.log(tracks);
         if (tracks.length === 0) {
-          console.error('No tracks found.');
-          return;
+          console.error('No tracks found.')
+          return
         }
 
         const matchedTrack = tracks.find(track => {
-          const trackName = track.name?.toLowerCase();
-          const artistNames = track.artists?.map(artist => artist.name?.toLowerCase()).filter(Boolean) || [];
+          const trackName = track.name?.toLowerCase()
+          const artistNames = track.artists?.map(artist => artist.name?.toLowerCase()).filter(Boolean) || []
 
           if (!trackName || artistNames.length === 0) {
-            return false;
+            return false
           }
 
           return (
             trackName === songName.title.toLowerCase() &&
             artistNames.some(artistName => artistName === songName.subtitle.toLowerCase())
-          );
-        });
+          )
+        })
 
         if (matchedTrack) {
-          setTrackId(matchedTrack.id);
+          setTrackId(matchedTrack.id)
         } else {
-          // If no exact match is found, use the first track
-          setTrackId(tracks[0].id);
-          console.log('No exact match found. Using the first search result.');
+          setTrackId(tracks[0].id)
+          console.log('No exact match found. Using the first search result.')
         }
       } catch (error) {
-        console.error('Error searching Spotify:', error);
+        console.error('Error searching Spotify:', error)
       }
-    };
+    }
 
-    searchSpotify();
-  }, [songName]);
+    searchSpotify()
+  }, [songName])
 
   if (!trackId) {
-    return <p className="mt-4 text-center text-gray-600">Searching for song on Spotify...</p>;
+    return (
+      <div className="mt-4 text-center text-gray-600 dark:text-gray-400">
+        Searching for song on Spotify...
+      </div>
+    )
   }
 
   return (
@@ -105,7 +106,7 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ songName }) => {
         className="rounded-lg"
       ></iframe>
     </div>
-  );
-};
+  )
+}
 
 export default SpotifyPlayer;
