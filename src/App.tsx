@@ -4,6 +4,7 @@ import AudioAnalyzer from './components/AudioAnalyzer';
 import SpotifyPlayer from './components/SpotifyPlayer';
 import { Toaster } from 'react-hot-toast';
 import Header from './components/Header';
+import Footer from './components/Footer';
 import { MusicIcon } from 'lucide-react'
 
 interface AnalyzedSong {
@@ -51,6 +52,8 @@ export default function App() {
         </div>
       </main>
       <Toaster position="bottom-center" />
+
+      <Footer />
     </div>
   )
 }
