@@ -1,4 +1,3 @@
-import React from 'react'
 import { MusicIcon } from 'lucide-react'
 
 export function Header() {
