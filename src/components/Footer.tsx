@@ -1,49 +1,63 @@
 import { AiFillGithub, AiOutlineTwitter, AiFillLinkedin, AiOutlineProfile } from 'react-icons/ai';
 import { IoMailOutline } from 'react-icons/io5';
+import { FaPhoneAlt } from 'react-icons/fa';
 
 const Footer: React.FC = () => {
     return (
-        <footer className="bg-gray-800 text-white p-4">
-            <div className="container mx-auto text-center">
-                <p className='text-xl font-medium'>Get In Touch</p>
-                <ul className='flex flex-col text-gray-600 cursor-pointer'>
-                    <li className="flex gap-2 justify-center">+91-212-456-7890</li>
-                    <li className="flex gap-2 justify-center">
-                        <IoMailOutline className="text-gray-600 hover:text-black" size={20} />
-                        <a href="mailto:itxnargiskhatun@gmail.com" title="My Gmail account" aria-label="Gmail icon" className="text-gray-600 hover:text-black">
-                            itxnargiskhatun@gmail.com
-                        </a>
-                    </li>
-                    <li className="flex gap-2 justify-center">
-                        <AiOutlineProfile className="text-gray-600 hover:text-black" size={20} />
-                        <a
-                            href="https://itxnargis.github.io/personal-portfolio/"
-                            title="View my portfolio"
-                            aria-label="Portfolio link"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-gray-600 hover:text-black"
-                        >
-                            View My Portfolio
-                        </a>
-                    </li>
-                </ul>
-                <p className='text-xl font-medium'>Follow Me</p>
-                <ul className='flex flex-col gap-2 text-gray-600 cursor-pointer'>
-                    <li className="flex gap-2 justify-center">
-                        <a href="https://github.com/itxnargis" title="Connect to Github" aria-label="Github icon" className="text-gray-600 hover:text-white">
-                            <AiFillGithub size={20} />
-                        </a>
-                        <a href="https://x.com/81283nargis?s=09" title="My personal Twitter account" aria-label="Twitter icon" className="text-gray-600 hover:text-white">
-                            <AiOutlineTwitter size={20} />
-                        </a>
-                        <a href="https://www.linkedin.com/in/nargis-khatun-4008ab2a9/" title="My LinkedIn account" aria-label="LinkedIn icon" className="text-gray-600 hover:text-white">
-                            <AiFillLinkedin size={20} />
-                        </a>
-                    </li>
-                </ul>
-                <p>Developed by Nargis ❤️</p>
-                <p>&copy; 2023 Audio Analyzer. All rights reserved.</p>
+        <footer className="bg-gray-900 text-white py-12">
+            <div className="container mx-auto px-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div className="space-y-4">
+                        <h3 className="text-2xl font-bold mb-4">Get In Touch</h3>
+                        <ul className="space-y-2">
+                            <li className="flex items-center gap-2">
+                                <FaPhoneAlt className="text-primary" />
+                                <span>+91-212-456-7890</span>
+                            </li>
+                            <li className="flex items-center gap-2">
+                                <IoMailOutline className="text-primary" />
+                                <a href="mailto:itxnargiskhatun@gmail.com" className="hover:text-primary transition-colors">
+                                    itxnargiskhatun@gmail.com
+                                </a>
+                            </li>
+                            <li className="flex items-center gap-2">
+                                <AiOutlineProfile className="text-primary" />
+                                <a
+                                    href="https://itxnargis.github.io/personal-portfolio/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="hover:text-primary transition-colors"
+                                >
+                                    View My Portfolio
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div className="space-y-4">
+                        <h3 className="text-2xl font-bold mb-4">Follow Me</h3>
+                        <div className="flex gap-4">
+                            <a href="https://github.com/itxnargis" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
+                                <AiFillGithub size={24} />
+                            </a>
+                            <a href="https://x.com/81283nargis?s=09" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
+                                <AiOutlineTwitter size={24} />
+                            </a>
+                            <a href="https://www.linkedin.com/in/nargis-khatun-4008ab2a9/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
+                                <AiFillLinkedin size={24} />
+                            </a>
+                        </div>
+                    </div>
+                    <div className="space-y-4">
+                        <h3 className="text-2xl font-bold mb-4">About</h3>
+                        <p className="text-gray-400">
+                            Audio Analyzer is a cutting-edge platform designed to provide comprehensive audio analysis tools for professionals and enthusiasts alike.
+                        </p>
+                    </div>
+                </div>
+                <div className="mt-8 pt-8 border-t border-gray-800 text-center">
+                    <p className="text-gray-400">Developed with ❤️ by Nargis</p>
+                    <p className="text-gray-500 mt-2">&copy; 2023 Audio Analyzer. All rights reserved.</p>
+                </div>
             </div>
         </footer>
     )

@@ -23,11 +23,11 @@ export default function App() {
       <main className="flex-grow container mx-auto px-4 py-8">
         <div className="max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
           <div className="p-6">
-            <h2 className="text-2xl font-bold text-center flex items-center justify-center mb-4">
-              <MusicIcon className="w-6 h-6 mr-2" />
+            <h2 className="text-2xl font-bold text-center flex items-center justify-center mb-4 text-white">
+              <MusicIcon className="w-6 h-6 mr-2 text-white" />
               Audio Analyzer
             </h2>
-            <p className="text-center text-gray-600 dark:text-gray-400 mb-6">
+            <p className="text-center text-gray-600 dark:text-gray-100 mb-6">
               Upload an audio file to analyze and find matching songs on Spotify
             </p>
             <div className="space-y-6">
@@ -42,8 +42,8 @@ export default function App() {
 
         <div className="max-w-2xl mx-auto mt-8 bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
           <div className="p-6">
-            <h3 className="text-xl font-semibold mb-4">How it works?</h3>
-            <ol className="list-decimal list-inside space-y-2 text-gray-600 dark:text-gray-400">
+            <h3 className="text-xl font-semibold mb-4 text-white">How it works?</h3>
+            <ol className="list-decimal list-inside space-y-2 text-gray-600 dark:text-gray-100">
               <li>Upload an MP3 file using the file input or drag-and-drop area.</li>
               <li>Click the "Analyze Audio" button and wait for the analysis to complete.</li>
               <li>View the results and listen to the matched song on Spotify.</li>

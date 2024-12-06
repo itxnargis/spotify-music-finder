@@ -35,7 +35,7 @@ export function AudioUploader({ setAudioFile }: AudioUploaderProps) {
     >
       <input {...getInputProps()} />
       <CloudUploadIcon className="mx-auto h-12 w-12 text-gray-400" />
-      <p className="mt-2 text-sm text-gray-600">
+      <p className="mt-2 text-sm text-white">
         {isDragActive
           ? 'Drop the audio file here'
           : 'Drag and drop an audio file, or click to select'}
