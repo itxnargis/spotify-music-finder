@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { a } from 'react-scroll'
 import { MusicIcon, Menu, X } from 'lucide-react'
 
 export function Header() {
@@ -15,10 +14,10 @@ export function Header() {
           </a>
 
           <nav className="hidden md:flex space-x-4">
-          <a href="#home" smooth={true} duration={500} className="cursor-pointer hover:text-purple-200 transition-colors">Home</a>
-            <a href="#how-it-works" smooth={true} duration={500} className="cursor-pointer hover:text-purple-200 transition-colors">How It Works</a>
-            <a href="#why-use" smooth={true} duration={500} className="cursor-pointer hover:text-purple-200 transition-colors">Why use it?</a>
-            <a href="#footer" smooth={true} duration={500} className="cursor-pointer hover:text-purple-200 transition-colors">Contact</a>
+          <a href="#home" className="cursor-pointer hover:text-purple-200 transition-colors">Home</a>
+            <a href="#how-it-works" className="cursor-pointer hover:text-purple-200 transition-colors">How It Works</a>
+            <a href="#why-use" className="cursor-pointer hover:text-purple-200 transition-colors">Why use it?</a>
+            <a href="#footer" className="cursor-pointer hover:text-purple-200 transition-colors">Contact</a>
           </nav>
 
           <button
@@ -36,10 +35,10 @@ export function Header() {
 
         {isMenuOpen && (
           <nav className="mt-4 md:hidden">
-            <a onClick={()=> setIsMenuOpen(false)} href="#home" smooth={true} duration={500} className="block py-2 cursor-pointer hover:text-purple-200 transition-colors">Home</a>
-            <a onClick={()=> setIsMenuOpen(false)} href="#how-it-works" smooth={true} duration={500} className="block py-2 cursor-pointer hover:text-purple-200 transition-colors">How It Works</a>
-            <a onClick={()=> setIsMenuOpen(false)} href="#why-use" smooth={true} duration={500} className="block py-2 cursor-pointer hover:text-purple-200 transition-colors">Why use it?</a>
-            <a onClick={()=> setIsMenuOpen(false)} href="#footer" smooth={true} duration={500} className="block py-2 cursor-pointer hover:text-purple-200 transition-colors">Contact</a>
+            <a onClick={()=> setIsMenuOpen(false)} href="#home" className="block py-2 cursor-pointer hover:text-purple-200 transition-colors">Home</a>
+            <a onClick={()=> setIsMenuOpen(false)} href="#how-it-works" className="block py-2 cursor-pointer hover:text-purple-200 transition-colors">How It Works</a>
+            <a onClick={()=> setIsMenuOpen(false)} href="#why-use" className="block py-2 cursor-pointer hover:text-purple-200 transition-colors">Why use it?</a>
+            <a onClick={()=> setIsMenuOpen(false)} href="#footer" className="block py-2 cursor-pointer hover:text-purple-200 transition-colors">Contact</a>
           </nav>
         )}
       </div>
