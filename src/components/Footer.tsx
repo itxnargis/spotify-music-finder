@@ -2,9 +2,13 @@ import { AiFillGithub, AiOutlineTwitter, AiFillLinkedin, AiOutlineProfile } from
 import { IoMailOutline } from 'react-icons/io5';
 import { FaPhoneAlt } from 'react-icons/fa';
 
-const Footer: React.FC = () => {
+interface FooterProps {
+    id?: string;
+}
+
+const Footer: React.FC<FooterProps> = ({ id }) => {
     return (
-        <footer className="bg-gray-900 text-white py-12">
+        <footer id={id} className="bg-gray-900 text-white py-12">
             <div className="container mx-auto px-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     <div className="space-y-4">
@@ -50,7 +54,7 @@ const Footer: React.FC = () => {
                     <div className="space-y-4">
                         <h3 className="text-2xl font-bold mb-4">About</h3>
                         <p className="text-gray-400">
-                            Audio Analyzer is a cutting-edge platform designed to provide comprehensive audio analysis tools for professionals and enthusiasts alike.
+                            Spotify Music Finder seamlessly connects your local music files to Spotify’s vast library. Identify tracks, play favorites, and discover new music effortlessly.
                         </p>
                     </div>
                 </div>

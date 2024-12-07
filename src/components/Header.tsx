@@ -1,14 +1,50 @@
-import { MusicIcon } from 'lucide-react'
+import { useState } from 'react'
+import { a } from 'react-scroll'
+import { MusicIcon, Menu, X } from 'lucide-react'
 
 export function Header() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+
   return (
-    <header className="bg-purple-600 text-white p-4 shadow-md">
-      <div className="container mx-auto flex justify-center items-center">
-        <MusicIcon className="w-6 h-6 mr-2" />
-        <h1 className="text-2xl font-bold">Audio Analyzer</h1>
+    <header className="sticky top-0 z-50 bg-gradient-to-r from-purple-600 to-indigo-600 text-white p-4 shadow-md">
+      <div className="container mx-auto">
+        <div className="flex justify-between items-center">
+          <a href="/" className="flex items-center space-x-2 text-2xl font-bold">
+            <MusicIcon className="w-8 h-8" />
+            <span>Spotify Music Finder</span>
+          </a>
+
+          <nav className="hidden md:flex space-x-4">
+          <a href="#home" smooth={true} duration={500} className="cursor-pointer hover:text-purple-200 transition-colors">Home</a>
+            <a href="#how-it-works" smooth={true} duration={500} className="cursor-pointer hover:text-purple-200 transition-colors">How It Works</a>
+            <a href="#why-use" smooth={true} duration={500} className="cursor-pointer hover:text-purple-200 transition-colors">Why use it?</a>
+            <a href="#footer" smooth={true} duration={500} className="cursor-pointer hover:text-purple-200 transition-colors">Contact</a>
+          </nav>
+
+          <button
+            className="md:hidden focus:outline-none"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            {isMenuOpen ? (
+              <X className="w-6 h-6" />
+            ) : (
+              <Menu className="w-6 h-6" />
+            )}
+          </button>
+        </div>
+
+        {isMenuOpen && (
+          <nav className="mt-4 md:hidden">
+            <a onClick={()=> setIsMenuOpen(false)} href="#home" smooth={true} duration={500} className="block py-2 cursor-pointer hover:text-purple-200 transition-colors">Home</a>
+            <a onClick={()=> setIsMenuOpen(false)} href="#how-it-works" smooth={true} duration={500} className="block py-2 cursor-pointer hover:text-purple-200 transition-colors">How It Works</a>
+            <a onClick={()=> setIsMenuOpen(false)} href="#why-use" smooth={true} duration={500} className="block py-2 cursor-pointer hover:text-purple-200 transition-colors">Why use it?</a>
+            <a onClick={()=> setIsMenuOpen(false)} href="#footer" smooth={true} duration={500} className="block py-2 cursor-pointer hover:text-purple-200 transition-colors">Contact</a>
+          </nav>
+        )}
       </div>
     </header>
   )
 }
 
-export default Header;
+export default Header
