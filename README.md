@@ -5,7 +5,7 @@ Spotify Music Finder is a web application that allows you to upload an audio fil
 ----
 ## Demo
 
-![image](https://spotify-music-finder-bihx7q1kh-nargis-khatuns-projects.vercel.app/)
+![image](https://github.com/user-attachments/assets/278d7bdf-992c-4345-aff3-707767e2c9ad)
 
 ----
 
