@@ -1,9 +1,9 @@
-# Spotify Music Finder
+# [Spotify Music Finder](https://spotify-music-finder-eight.vercel.app/)
 
 Spotify Music Finder is a web application that allows you to upload an audio file, analyze it, and find its corresponding match on Spotify. It connects your local audio files with Spotify's vast music library, helping you discover tracks you might be looking for or explore new ones.
 
 ----
-## Demo
+## Demo - [Try demo](https://spotify-music-finder-eight.vercel.app/)
 
 ![image](https://github.com/user-attachments/assets/278d7bdf-992c-4345-aff3-707767e2c9ad)
 
