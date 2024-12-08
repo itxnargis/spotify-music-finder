@@ -1,9 +1,9 @@
-# [Spotify Music Finder](https://spotify-music-finder-eight.vercel.app/)
+# [Spotify Music Finder](https://spotify-music-finder-inky.vercel.app/)
 
 Spotify Music Finder is a web application that allows you to upload an audio file, analyze it, and find its corresponding match on Spotify. It connects your local audio files with Spotify's vast music library, helping you discover tracks you might be looking for or explore new ones.
 
 ----
-## Demo - [Try demo](https://spotify-music-finder-eight.vercel.app/)
+## Demo - [Try demo](https://spotify-music-finder-inky.vercel.app/)
 
 ![image](https://github.com/user-attachments/assets/278d7bdf-992c-4345-aff3-707767e2c9ad)
 
@@ -85,7 +85,7 @@ Spotify Music Finder is a web application that allows you to upload an audio fil
 Displays the navigation bar with links to different sections of the page.
 
 ### `AudioUploader`
-Allows the user to upload an audio file by dragging and dropping or by selecting it via a file input.
+Allows the user to upload an audio file by dragging and dropping or selecting it via file input.
 
 ### `AudioAnalyzer`
 Processes the uploaded audio file and sends it to the Shazam API to identify the song. Displays the song details and gives feedback to the user.
@@ -111,4 +111,4 @@ If you'd like to contribute to this project, you can just fix the repository and
 
 - Created by [Nargis](https://github.com/itxnargis)
 - Email: [Mail](mailto:itxnargiskhatun@gmail.com)
-- Website: [Live demo](https://spotify-music-finder-eight.vercel.app/)
+- Website: [Live demo](https://spotify-music-finder-inky.vercel.app/)
