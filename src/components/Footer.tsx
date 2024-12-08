@@ -60,7 +60,7 @@ const Footer: React.FC<FooterProps> = ({ id }) => {
                 </div>
                 <div className="mt-8 pt-8 border-t border-gray-800 text-center">
                     <p className="text-gray-400">Developed with ❤️ by Nargis</p>
-                    <p className="text-gray-500 mt-2">&copy; 2023 Audio Analyzer. All rights reserved.</p>
+                    <p className="text-gray-500 mt-2">&copy; 2023 Spotify Music Finder. All rights reserved.</p>
                 </div>
             </div>
         </footer>

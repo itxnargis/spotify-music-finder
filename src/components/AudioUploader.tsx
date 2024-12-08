@@ -29,9 +29,8 @@ export function AudioUploader({ setAudioFile }: AudioUploaderProps) {
   return (
     <div
       {...getRootProps()}
-      className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
-        isDragActive ? 'border-purple-500 bg-purple-50' : 'border-gray-300 hover:border-purple-500'
-      }`}
+      className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${isDragActive ? 'border-primary-500 bg-primary-50' : 'border-gray-300 hover:border-primary-500'
+        }`}
     >
       <input {...getInputProps()} />
       <CloudUploadIcon className="mx-auto h-12 w-12 text-gray-400" />

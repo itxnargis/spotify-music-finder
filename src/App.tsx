@@ -23,7 +23,7 @@ function App() {
       <main className="flex-grow container mx-auto">
         <section id="home" className="max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden mt-8">
           <div className="p-6 md:p-8">
-            <h1 className="text-4xl font-bold text-center flex items-center justify-center mb-6 text-purple-600 dark:text-purple-400">
+            <h1 className="text-4xl font-bold text-center flex items-center justify-center mb-6 text-primary-900 dark:text-primary-400">
               <MusicIcon className="w-10 h-10 mr-3" />
               Spotify Music Finder
             </h1>
@@ -42,22 +42,22 @@ function App() {
 
         <section id="how-it-works" className="max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden mt-8">
           <div className="p-6 md:p-8">
-            <h2 className="text-3xl font-semibold mb-6 text-purple-600 dark:text-purple-400 flex items-center">
+            <h2 className="text-3xl font-semibold mb-6 text-primary-900 dark:text-primary-400 flex items-center">
               <HelpCircle className="w-8 h-8 mr-3" />
               How It Works
             </h2>
             <ol className="list-none space-y-4 text-gray-700 dark:text-gray-300">
               <li className="flex items-start">
-                <Upload className="w-6 h-6 mr-3 mt-1 flex-shrink-0 text-purple-500" />
-                <span><strong className="text-purple-600 dark:text-purple-400">Upload Your Audio File:</strong> Drag and drop your file or click the upload button to select an audio file from your device.</span>
+                <Upload className="w-6 h-6 mr-3 mt-1 flex-shrink-0 text-primary-500" />
+                <span><strong className="text-primary-900 dark:text-primary-400">Upload Your Audio File:</strong> Drag and drop your file or click the upload button to select an audio file from your device.</span>
               </li>
               <li className="flex items-start">
-                <Search className="w-6 h-6 mr-3 mt-1 flex-shrink-0 text-purple-500" />
-                <span><strong className="text-purple-600 dark:text-purple-400">Analyze with One Click:</strong> Hit the "Analyze Audio" button, and let our advanced algorithm identify the song.</span>
+                <Search className="w-6 h-6 mr-3 mt-1 flex-shrink-0 text-primary-500" />
+                <span><strong className="text-primary-900 dark:text-primary-400">Analyze with One Click:</strong> Hit the "Analyze Audio" button, and let our advanced algorithm identify the song.</span>
               </li>
               <li className="flex items-start">
-                <PlayCircle className="w-6 h-6 mr-3 mt-1 flex-shrink-0 text-purple-500" />
-                <span><strong className="text-purple-600 dark:text-purple-400">Discover Matches:</strong> Instantly view the matching songs and explore more details.</span>
+                <PlayCircle className="w-6 h-6 mr-3 mt-1 flex-shrink-0 text-primary-500" />
+                <span><strong className="text-primary-900 dark:text-primary-400">Discover Matches:</strong> Instantly view the matching songs and explore more details.</span>
               </li>
             </ol>
           </div>
@@ -65,26 +65,26 @@ function App() {
 
         <section id="why-use" className="max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden mt-8">
           <div className="p-6 md:p-8">
-            <h2 className="text-3xl font-semibold mb-6 text-purple-600 dark:text-purple-400">Why Use Audio Analyzer?</h2>
+            <h2 className="text-3xl font-semibold mb-6 text-primary-900 dark:text-primary-400">Why Use Spotify Music Finder?</h2>
             <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-700 dark:text-gray-300">
               <li className="flex items-center">
-                <svg className="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
+                <svg className="w-5 h-5 mr-2 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
                 Instantly identify songs from your audio files
               </li>
               <li className="flex items-center">
-                <svg className="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
+                <svg className="w-5 h-5 mr-2 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
                 Discover detailed information about tracks
               </li>
               <li className="flex items-center">
-                <svg className="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
+                <svg className="w-5 h-5 mr-2 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
                 Find similar songs and expand your music library
               </li>
               <li className="flex items-center">
-                <svg className="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
+                <svg className="w-5 h-5 mr-2 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
                 Easy-to-use interface for quick results
               </li>
               <li className="flex items-center">
-                <svg className="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
+                <svg className="w-5 h-5 mr-2 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
                 Explore artist information and related tracks
               </li>
             </ul>

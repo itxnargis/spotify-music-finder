@@ -50,7 +50,7 @@ export function AudioAnalyzer({ audioFile, setAnalyzedSong }: AudioAnalyzerProps
     <button
       onClick={analyzeAudio}
       disabled={isAnalyzing}
-      className="w-full bg-purple-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors disabled:bg-purple-300"
+      className="w-full bg-primary-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-primary-700 transition-colors disabled:bg-primary-300"
     >
       {isAnalyzing ? (
         <>
