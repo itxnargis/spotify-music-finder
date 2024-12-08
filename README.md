@@ -2,6 +2,13 @@
 
 Spotify Music Finder is a web application that allows you to upload an audio file, analyze it, and find its corresponding match on Spotify. It connects your local audio files with Spotify's vast music library, helping you discover tracks you might be looking for or explore new ones.
 
+----
+## Demo
+
+![image](https://spotify-music-finder-bihx7q1kh-nargis-khatuns-projects.vercel.app/)
+
+----
+
 ## Features
 
 - Upload an audio file (e.g., MP3, WAV).
