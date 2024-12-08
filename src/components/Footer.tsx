@@ -1,6 +1,5 @@
 import { AiFillGithub, AiOutlineTwitter, AiFillLinkedin, AiOutlineProfile } from 'react-icons/ai';
 import { IoMailOutline } from 'react-icons/io5';
-import { FaPhoneAlt } from 'react-icons/fa';
 
 interface FooterProps {
     id?: string;
@@ -14,10 +13,6 @@ const Footer: React.FC<FooterProps> = ({ id }) => {
                     <div className="space-y-4">
                         <h3 className="text-2xl font-bold mb-4">Get In Touch</h3>
                         <ul className="space-y-2">
-                            <li className="flex items-center gap-2">
-                                <FaPhoneAlt className="text-primary" />
-                                <span>+91-212-456-7890</span>
-                            </li>
                             <li className="flex items-center gap-2">
                                 <IoMailOutline className="text-primary" />
                                 <a href="mailto:itxnargiskhatun@gmail.com" className="hover:text-primary transition-colors">
