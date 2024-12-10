@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import toast from 'react-hot-toast'
 
 interface Artist {
   name: string | undefined
@@ -80,7 +81,8 @@ export function SpotifyPlayer({ songName }: SpotifyPlayerProps) {
           console.log('No exact match found. Using the first search result.')
         }
       } catch (error) {
-        console.error('Error searching Spotify:', error)
+        console.error('Error searching Spotify:', error);
+        toast.error('Error searching Spotify');
       }
     }
 

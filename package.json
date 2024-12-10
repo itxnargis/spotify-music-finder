@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ffmpeg/ffmpeg": "^0.12.10",
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.2.0",
     "@types/react-scroll": "^1.8.10",
