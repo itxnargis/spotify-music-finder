@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Toaster } from 'react-hot-toast'
 import Header from './components/Header'
 import Footer from './components/Footer'
@@ -6,6 +6,9 @@ import { MusicIcon, HelpCircle, Upload, Search, PlayCircle } from 'lucide-react'
 import AudioUploader from './components/AudioUploader'
 import AudioAnalyzer from './components/AudioAnalyzer'
 import SpotifyPlayer from './components/SpotifyPlayer'
+import ScanStats from './components/ScanStats'
+import FileShareHandler from './components/FileShareHandler'
+import { useAnalytics } from './hooks/useAnalytics'
 
 interface AnalyzedSong {
   title: string
@@ -16,6 +19,27 @@ interface AnalyzedSong {
 function App() {
   const [audioFile, setAudioFile] = useState<File | null>(null)
   const [analyzedSong, setAnalyzedSong] = useState<AnalyzedSong | null>(null)
+  const [scanStats, setScanStats] = useState({ total: 0, successful: 0, failed: 0 })
+  const { trackPageView, trackEvent } = useAnalytics()
+
+  useEffect(() => {
+    trackPageView('Home')
+    const storedStats = localStorage.getItem('scanStats')
+    if (storedStats) {
+      setScanStats(JSON.parse(storedStats))
+    }
+  }, [])
+
+  const handleScanComplete = (success: boolean) => {
+    const newStats = {
+      total: scanStats.total + 1,
+      successful: success ? scanStats.successful + 1 : scanStats.successful,
+      failed: !success ? scanStats.failed + 1 : scanStats.failed,
+    }
+    setScanStats(newStats)
+    localStorage.setItem('scanStats', JSON.stringify(newStats))
+    trackEvent(success ? 'Successful Scan' : 'Failed Scan')
+  }
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -33,9 +57,11 @@ function App() {
             <div className="space-y-6 sm:space-y-8">
               <AudioUploader setAudioFile={setAudioFile} />
               {audioFile && (
-                <AudioAnalyzer audioFile={audioFile} setAnalyzedSong={setAnalyzedSong} />
+                <AudioAnalyzer audioFile={audioFile} setAnalyzedSong={setAnalyzedSong} onScanComplete={handleScanComplete} />
               )}
               {analyzedSong && <SpotifyPlayer songName={analyzedSong} />}
+              <ScanStats stats={scanStats} />
+              <FileShareHandler />
             </div>
           </div>
         </section>

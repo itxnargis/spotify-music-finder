@@ -6,9 +6,10 @@ import { Loader2 } from 'lucide-react'
 interface AudioAnalyzerProps {
   audioFile: File
   setAnalyzedSong: (song: { title: string; subtitle: string; meta: object }) => void
+  onScanComplete: (success: boolean) => void
 }
 
-export function AudioAnalyzer({ audioFile, setAnalyzedSong }: AudioAnalyzerProps) {
+export function AudioAnalyzer({ audioFile, setAnalyzedSong, onScanComplete }: AudioAnalyzerProps) {
   const [isAnalyzing, setIsAnalyzing] = useState(false)
 
   const analyzeAudio = async () => {
@@ -26,12 +27,13 @@ export function AudioAnalyzer({ audioFile, setAnalyzedSong }: AudioAnalyzerProps
 
       const result = response.data
       if (result.matches && result.matches.length > 0) {
-        // const match = result.matches[0]
         const track = result.track
         setAnalyzedSong({ title: track.title, subtitle: track.subtitle, meta: track })
         toast.success('Song analyzed successfully!')
+        onScanComplete(true)
       } else {
         toast.error('Could not identify the song.')
+        onScanComplete(false)
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -41,6 +43,7 @@ export function AudioAnalyzer({ audioFile, setAnalyzedSong }: AudioAnalyzerProps
         console.error('Unexpected error:', error)
         toast.error('An unexpected error occurred. Please try again.')
       }
+      onScanComplete(false)
     } finally {
       setIsAnalyzing(false)
     }
@@ -63,4 +66,5 @@ export function AudioAnalyzer({ audioFile, setAnalyzedSong }: AudioAnalyzerProps
     </button>
   )
 }
-export default AudioAnalyzer;
+
+export default AudioAnalyzer
