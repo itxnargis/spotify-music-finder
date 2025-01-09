@@ -22,7 +22,11 @@
     "react-hot-toast": "^2.4.1",
     "react-icons": "^5.4.0",
     "react-router-dom": "^7.0.2",
-    "react-scroll": "^1.9.0"
+    "react-scroll": "^1.9.0",
+    "workbox-expiration": "^7.3.0",
+    "workbox-precaching": "^7.3.0",
+    "workbox-routing": "^7.3.0",
+    "workbox-strategies": "^7.3.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",

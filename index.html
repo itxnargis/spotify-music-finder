@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -27,9 +27,24 @@
 
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <link rel="manifest" href="/manifest.json" />
+    
+    <!-- Add these PWA-related meta tags -->
+    <meta name="theme-color" content="#1DB954" />
+    <link rel="apple-touch-icon" href="/icons/spotify-192x192.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+
+    <script>
+      const channel = new BroadcastChannel('service-worker-channel');
+      channel.addEventListener('message', (event)=>{
+        console.log(event);
+      })
+    </script>
   </body>
 </html>
+
