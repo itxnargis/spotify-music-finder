@@ -1,59 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Spotify Music Finder | Identify Songs Effortlessly</title>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <meta name="description" content="Spotify Music Finder helps you identify songs saved on your device by matching them to Spotify's vast music library. Upload, analyze, and discover your track now!" />
+  <title>Spotify Music Finder | Identify Songs Effortlessly</title>
 
-    <meta name="keywords" content="Spotify Music Finder, Song Identifier, Audio Analyzer, Match Songs to Spotify, Discover Music, Music Library, Song Analysis Tool" />
+  <meta name="description"
+    content="Spotify Music Finder helps you identify songs saved on your device by matching them to Spotify's vast music library. Upload, analyze, and discover your track now!" />
 
-    <meta name="author" content="Nargis" />
-    <meta name="robots" content="index, follow" />
+  <meta name="keywords"
+    content="Spotify Music Finder, Song Identifier, Audio Analyzer, Match Songs to Spotify, Discover Music, Music Library, Song Analysis Tool" />
 
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="Spotify Music Finder | Identify Songs Effortlessly" />
-    <meta property="og:description" content="Upload your audio file, analyze it, and discover matching tracks on Spotify with ease!" />
-    <meta property="og:image" content="https://spotify-music-finder-inky.vercel.app/spotify-image.png" />
-    <meta property="og:url" content="https://spotify-music-finder-inky.vercel.app/" />
-    <meta property="og:site_name" content="Spotify Music Finder" />
+  <meta name="author" content="Nargis" />
+  <meta name="robots" content="index, follow" />
 
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Spotify Music Finder | Identify Songs Effortlessly" />
-    <meta name="twitter:description" content="Upload your audio file, analyze it, and discover matching tracks on Spotify with ease!" />
-    <meta name="twitter:image" content="https://spotify-music-finder-inky.vercel.app/spotify-image.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Spotify Music Finder | Identify Songs Effortlessly" />
+  <meta property="og:description"
+    content="Upload your audio file, analyze it, and discover matching tracks on Spotify with ease!" />
+  <meta property="og:image" content="https://spotify-music-finder-inky.vercel.app/spotify-image.png" />
+  <meta property="og:url" content="https://spotify-music-finder-inky.vercel.app/" />
+  <meta property="og:site_name" content="Spotify Music Finder" />
 
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <link rel="manifest" href="/manifest.json" />
-    
-    <!-- Add these PWA-related meta tags -->
-    <meta name="theme-color" content="#1DB954" />
-    <link rel="apple-touch-icon" href="/icons/spotify-192x192.png" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-  </head>
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Spotify Music Finder | Identify Songs Effortlessly" />
+  <meta name="twitter:description"
+    content="Upload your audio file, analyze it, and discover matching tracks on Spotify with ease!" />
+  <meta name="twitter:image" content="https://spotify-music-finder-inky.vercel.app/spotify-image.png" />
+
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <link rel="manifest" href="/manifest.json" />
+
+  <!-- Add these PWA-related meta tags -->
+  <meta name="theme-color" content="#1DB954" />
+  <link rel="apple-touch-icon" href="/icons/spotify-192x192.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
   <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-GLRSER1P6X"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-GLRSER1P6X"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
 
-  gtag('config', 'G-GLRSER1P6X');
-</script>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    gtag('config', 'G-GLRSER1P6X');
+  </script>
 
-    <script>
-      const channel = new BroadcastChannel('service-worker-channel');
-      channel.addEventListener('message', (event)=>{
-        console.log(event);
-      })
-    </script>
-  </body>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+
+  <script>
+    const channel = new BroadcastChannel('service-worker-channel');
+    channel.addEventListener('message', (event) => {
+      console.log(event);
+    })
+  </script>
+</body>
+
 </html>
-
