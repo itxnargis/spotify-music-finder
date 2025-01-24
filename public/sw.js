@@ -21,7 +21,7 @@ function log(message, ...optionalParams) {
             ...optionalParams
         );
     }
-}
+} 
 
 function logError(message, ...optionalParams) {
     if (DEBUG) {
