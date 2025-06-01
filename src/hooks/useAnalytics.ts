@@ -1,20 +1,20 @@
-import { useEffect } from 'react'
+"use client"
 
-export const useAnalytics = () => {
-  const trackPageView = (pageName: string) => {
-    // Implement your analytics tracking here
-    console.log(`Page view: ${pageName}`)
-  }
+import { useCallback } from "react"
 
-  const trackEvent = (eventName: string, eventData?: any) => {
-    // Implement your analytics event tracking here
-    console.log(`Event: ${eventName}`, eventData)
-  }
-
-  useEffect(() => {
-    // Initialize analytics here if needed
+export function useAnalytics() {
+  const trackPageView = useCallback((page: string) => {
+    // Mock analytics tracking
+    console.log(`Page view: ${page}`)
   }, [])
 
-  return { trackPageView, trackEvent }
-}
+  const trackEvent = useCallback((event: string, properties?: Record<string, any>) => {
+    // Mock event tracking
+    console.log(`Event: ${event}`, properties)
+  }, [])
 
+  return {
+    trackPageView,
+    trackEvent,
+  }
+}

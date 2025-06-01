@@ -1,30 +1,25 @@
-import { useState, useEffect } from 'react'
-import { Toaster } from 'react-hot-toast'
-import Header from './components/Header'
-import Footer from './components/Footer'
-import { MusicIcon, HelpCircle, Upload, Search, PlayCircle } from 'lucide-react'
-import AudioUploader from './components/AudioUploader'
-import AudioAnalyzer from './components/AudioAnalyzer'
-import SpotifyPlayer from './components/SpotifyPlayer'
-import ScanStats from './components/ScanStats'
-import FileShareHandler from './components/FileShareHandler'
-import { useAnalytics } from './hooks/useAnalytics'
+"use client"
 
-interface AnalyzedSong {
-  title: string
-  subtitle: string
-  meta: object
-}
+import { useState, useEffect } from "react"
+import { Toaster } from "react-hot-toast"
+import Header from "./components/Header"
+import Footer from "./components/Footer"
+import { HelpCircle, Upload, Search, PlayCircle, TrendingUp } from 'lucide-react'
+import ScanStats from "./components/ScanStats"
+import FileShareHandler from "./components/FileShareHandler"
+import TrendingTracks from "./components/TrendingTracks"
+import MusicHeroSection from "./components/Home"
+import { useAnalytics } from "./hooks/useAnalytics"
 
-function App() {
-  const [audioFile, setAudioFile] = useState<File | null>(null)
-  const [analyzedSong, setAnalyzedSong] = useState<AnalyzedSong | null>(null)
+export default function App() {
   const [scanStats, setScanStats] = useState({ total: 0, successful: 0, failed: 0 })
+  const [mounted, setMounted] = useState(false)
   const { trackPageView, trackEvent } = useAnalytics()
 
   useEffect(() => {
-    trackPageView('Home')
-    const storedStats = localStorage.getItem('scanStats')
+    setMounted(true)
+    trackPageView("Home")
+    const storedStats = localStorage.getItem("scanStats")
     if (storedStats) {
       setScanStats(JSON.parse(storedStats))
     }
@@ -37,92 +32,158 @@ function App() {
       failed: !success ? scanStats.failed + 1 : scanStats.failed,
     }
     setScanStats(newStats)
-    localStorage.setItem('scanStats', JSON.stringify(newStats))
-    trackEvent(success ? 'Successful Scan' : 'Failed Scan')
+    localStorage.setItem("scanStats", JSON.stringify(newStats))
+    trackEvent(success ? "Successful Scan" : "Failed Scan")
+  }
+
+  if (!mounted) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-black flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-green-500"></div>
+      </div>
+    )
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="flex flex-col min-h-screen">
       <Header />
-      <main className="flex-grow container mx-auto px-4 sm:px-6 md:px-8">
-        <section id="home" className="max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden mt-4 sm:mt-8">
-          <div className="p-4 sm:p-6 md:p-8">
-            <h1 className="text-3xl sm:text-4xl font-bold text-center flex flex-col sm:flex-row items-center justify-center mb-4 sm:mb-6 text-primary-900 dark:text-primary-400">
-              <MusicIcon className="w-8 h-8 sm:w-10 sm:h-10 mb-2 sm:mb-0 sm:mr-3" />
-              <span>Spotify Music Finder</span>
-            </h1>
-            <p className="text-center text-base sm:text-lg text-gray-700 dark:text-gray-300 mb-6 sm:mb-8">
-              Have a song saved on your device and wondering if it's available on Spotify? With Spotify Music Finder, you can upload your audio file, analyze it, and discover its Spotify match effortlessly.
-            </p>
-            <div className="space-y-6 sm:space-y-8">
-              <AudioUploader setAudioFile={setAudioFile} />
-              {audioFile && (
-                <AudioAnalyzer audioFile={audioFile} setAnalyzedSong={setAnalyzedSong} onScanComplete={handleScanComplete} />
-              )}
-              {analyzedSong && <SpotifyPlayer songName={analyzedSong} />}
+
+      {/* Hero Section with complete upload/analyze/play functionality */}
+      <MusicHeroSection onScanComplete={handleScanComplete} />
+
+      <main className="flex-grow bg-gradient-to-br from-slate-900 via-gray-900 to-black">
+        <div className="container mx-auto px-6 py-20 space-y-20">
+          
+          {/* Trending Section */}
+          <section className="max-w-6xl mx-auto">
+            <div className="text-center mb-12">
+              <div className="flex items-center justify-center gap-3 mb-4">
+                <TrendingUp className="w-8 h-8 text-green-400" />
+                <h2 className="text-3xl font-bold text-white">Trending Now</h2>
+              </div>
+              <p className="text-lg text-gray-300 max-w-2xl mx-auto">Discover what's popular on Spotify right now</p>
+            </div>
+            <TrendingTracks />
+          </section>
+
+          {/* Stats & Share Grid */}
+          <section className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8">
+            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
               <ScanStats stats={scanStats} />
+            </div>
+            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
               <FileShareHandler />
             </div>
-          </div>
-        </section>
+          </section>
 
-        <section id="how-it-works" className="max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden mt-4 sm:mt-8">
-          <div className="p-4 sm:p-6 md:p-8">
-            <h2 className="text-2xl sm:text-3xl font-semibold mb-4 sm:mb-6 text-primary-900 dark:text-primary-400 flex items-center justify-center sm:justify-start">
-              <HelpCircle className="w-6 h-6 sm:w-8 sm:h-8 mr-2 sm:mr-3" />
-              How It Works
-            </h2>
-            <ol className="list-none space-y-3 sm:space-y-4 text-gray-700 dark:text-gray-300">
-              <li className="flex items-start">
-                <Upload className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 mt-1 flex-shrink-0 text-primary-500" />
-                <span className="text-sm sm:text-base"><strong className="text-primary-900 dark:text-primary-400">Upload Your Audio File:</strong> Drag and drop your file or click the upload button to select an audio file from your device.</span>
-              </li>
-              <li className="flex items-start">
-                <Search className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 mt-1 flex-shrink-0 text-primary-500" />
-                <span className="text-sm sm:text-base"><strong className="text-primary-900 dark:text-primary-400">Analyze with One Click:</strong> Hit the "Analyze Audio" button, and let our advanced algorithm identify the song.</span>
-              </li>
-              <li className="flex items-start">
-                <PlayCircle className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 mt-1 flex-shrink-0 text-primary-500" />
-                <span className="text-sm sm:text-base"><strong className="text-primary-900 dark:text-primary-400">Discover Matches:</strong> Instantly view the matching songs and explore more details.</span>
-              </li>
-            </ol>
-          </div>
-        </section>
+          {/* How It Works */}
+          <section id="how-it-works" className="max-w-5xl mx-auto">
+            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 md:p-12 border border-white/10">
+              <div className="text-center mb-12">
+                <div className="flex items-center justify-center gap-3 mb-4">
+                  <HelpCircle className="w-8 h-8 text-blue-400" />
+                  <h2 className="text-3xl font-bold text-white">How It Works</h2>
+                </div>
+                <p className="text-lg text-gray-300 max-w-2xl mx-auto">
+                  Three simple steps to discover your music on Spotify
+                </p>
+              </div>
 
-        <section id="why-use" className="max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden mt-4 sm:mt-8">
-          <div className="p-4 sm:p-6 md:p-8">
-            <h2 className="text-2xl sm:text-3xl font-semibold mb-4 sm:mb-6 text-primary-900 dark:text-primary-400 text-center sm:text-left">Why Use Spotify Music Finder?</h2>
-            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-gray-700 dark:text-gray-300">
-              <li className="flex items-center justify-center sm:justify-start">
-                <svg className="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
-                <span className="text-sm sm:text-base text-center sm:text-left">Instantly identify songs from your audio files</span>
-              </li>
-              <li className="flex items-center justify-center sm:justify-start">
-                <svg className="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
-                <span className="text-sm sm:text-base text-center sm:text-left">Discover detailed information about tracks</span>
-              </li>
-              <li className="flex items-center justify-center sm:justify-start">
-                <svg className="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
-                <span className="text-sm sm:text-base text-center sm:text-left">Find similar songs and expand your music library</span>
-              </li>
-              <li className="flex items-center justify-center sm:justify-start">
-                <svg className="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
-                <span className="text-sm sm:text-base text-center sm:text-left">Easy-to-use interface for quick results</span>
-              </li>
-              <li className="flex items-center justify-center sm:justify-start">
-                <svg className="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
-                <span className="text-sm sm:text-base text-center sm:text-left">Explore artist information and related tracks</span>
-              </li>
-            </ul>
-          </div>
-        </section>
+              <div className="grid md:grid-cols-3 gap-8">
+                {[
+                  {
+                    icon: Upload,
+                    title: "Upload",
+                    description: "Select your audio file from your device",
+                    color: "purple-400",
+                  },
+                  {
+                    icon: Search,
+                    title: "Analyze",
+                    description: "AI identifies your song using audio fingerprinting",
+                    color: "blue-400",
+                  },
+                  {
+                    icon: PlayCircle,
+                    title: "Discover",
+                    description: "Find the track on Spotify and explore more",
+                    color: "green-400",
+                  },
+                ].map((step, index) => (
+                  <div key={index} className="text-center">
+                    <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-white/10 border border-white/20 flex items-center justify-center">
+                      <step.icon className={`w-8 h-8 text-${step.color}`} />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3">{step.title}</h3>
+                    <p className="text-gray-300 leading-relaxed">{step.description}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* Features */}
+          <section className="max-w-6xl mx-auto">
+            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 md:p-12 border border-white/10">
+              <div className="text-center mb-12">
+                <h2 className="text-3xl font-bold text-white mb-4">Why Choose Our Platform?</h2>
+                <p className="text-lg text-gray-300 max-w-2xl mx-auto">
+                  Advanced features designed for music discovery
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[
+                  { icon: "🎵", title: "Instant Recognition", desc: "99% accuracy with advanced AI technology" },
+                  { icon: "🔥", title: "Trending Tracks", desc: "Real-time updates on what's hot on Spotify" },
+                  { icon: "🎨", title: "Audio Visualization", desc: "Stunning real-time music visualizations" },
+                  { icon: "🎯", title: "Smart Discovery", desc: "AI-powered music recommendations" },
+                  { icon: "📊", title: "Track Statistics", desc: "Monitor your music discovery journey" },
+                  { icon: "🚀", title: "Lightning Fast", desc: "Instant results with seamless experience" },
+                ].map((feature, index) => (
+                  <div
+                    key={index}
+                    className="p-6 rounded-xl bg-white/5 border border-white/10 hover:border-white/20 transition-all duration-300 hover:scale-105"
+                  >
+                    <div className="text-2xl mb-4">{feature.icon}</div>
+                    <h3 className="text-lg font-bold text-white mb-2">{feature.title}</h3>
+                    <p className="text-gray-300 text-sm leading-relaxed">{feature.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        </div>
       </main>
 
-      <Toaster position="bottom-center" />
+      <Toaster
+        position="bottom-center"
+        toastOptions={{
+          style: {
+            background: "rgba(15, 23, 42, 0.9)",
+            backdropFilter: "blur(16px)",
+            color: "white",
+            border: "1px solid rgba(255, 255, 255, 0.1)",
+            borderRadius: "12px",
+            fontSize: "14px",
+            padding: "12px 16px",
+          },
+          success: {
+            iconTheme: {
+              primary: "#10b981",
+              secondary: "white",
+            },
+          },
+          error: {
+            iconTheme: {
+              primary: "#ef4444",
+              secondary: "white",
+            },
+          },
+        }}
+      />
 
       <Footer id="footer" />
     </div>
   )
 }
-
-export default App
