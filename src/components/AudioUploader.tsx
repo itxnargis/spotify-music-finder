@@ -3,17 +3,11 @@
 import { useCallback, useState, useEffect, useRef } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { 
-  CloudUpload, 
   Music, 
-  FileAudio, 
-  Sparkles, 
   Upload,
   Search,
   CheckCircle,
   Clock,
-  Volume2,
-  Headphones,
-  PlayCircle
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 
@@ -66,10 +60,10 @@ export default function AudioUploader({
     onDragEnter: () => setDragActive(true),
     onDragLeave: () => setDragActive(false),
   })
-
-  const triggerFileSelect = () => {
-    fileInputRef.current?.click()
-  }
+  
+  // const triggerFileSelect = () => {
+  //   fileInputRef.current?.click()
+  // }
 
   const getCurrentStatus = () => {
     if (isAnalyzing) return { text: "Analyzing your track...", color: "text-blue-500", icon: Clock }
@@ -204,22 +198,6 @@ export default function AudioUploader({
             </div>
           </div>
 
-          {/* Action buttons */}
-          {/* <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-            <button 
-              onClick={triggerFileSelect}
-              className="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-full text-lg font-medium transition-all duration-300 hover:scale-105 shadow-lg flex items-center justify-center gap-2"
-            >
-              <Volume2 className="w-5 h-5" />
-              Upload Audio File
-            </button>
-            
-            <button className="bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-full text-lg font-medium transition-all duration-300 hover:scale-105 border border-white/20 flex items-center justify-center gap-2">
-              <Headphones className="w-5 h-5" />
-              Supported Formats
-            </button>
-          </div> */}
-
           {/* Supported formats */}
           <div className="mb-16">
             <div className="flex flex-wrap justify-center gap-3">
@@ -237,50 +215,6 @@ export default function AudioUploader({
               ))}
             </div>
           </div>
-
-          {/* How it works steps */}
-          {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-16">
-            {[
-              { 
-                icon: Upload, 
-                title: "1. Upload", 
-                desc: "Drag & drop or click to select your audio file",
-                color: "text-blue-400"
-              },
-              { 
-                icon: FileAudio, 
-                title: "2. Process", 
-                desc: "We handle your audio file with care and precision",
-                color: "text-purple-400"
-              },
-              { 
-                icon: Sparkles, 
-                title: "3. Ready", 
-                desc: "Your audio is processed and ready for analysis",
-                color: "text-green-400"
-              }
-            ].map((step, index) => (
-              <div 
-                key={index} 
-                className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:border-white/20 transition-all duration-300"
-              >
-                <div className="flex flex-col items-center text-center">
-                  <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center mb-4">
-                    <step.icon className={`w-6 h-6 ${step.color}`} />
-                  </div>
-                  <h3 className="text-lg font-semibold text-white mb-2">{step.title}</h3>
-                  <p className="text-sm text-gray-400 leading-relaxed">{step.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div> */}
-
-          {/* Trust indicator */}
-          {/* <div className="pt-8 border-t border-white/10">
-            <p className="text-gray-400 text-sm">
-              Secure audio processing with modern drag & drop technology
-            </p>
-          </div> */}
 
       {/* Custom animations */}
       <style>{`

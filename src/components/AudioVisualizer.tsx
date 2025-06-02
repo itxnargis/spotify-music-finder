@@ -12,7 +12,7 @@ export default function AudioVisualizer({ audioFile, isPlaying }: AudioVisualize
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const audioContextRef = useRef<AudioContext | null>(null)
   const analyserRef = useRef<AnalyserNode | null>(null)
-  const sourceRef = useRef<AudioBufferSourceNode | null>(null)
+  // const sourceRef = useRef<AudioBufferSourceNode | null>(null)
   const animationRef = useRef<number | null>(null)
   const [isInitialized, setIsInitialized] = useState(false)
   const [audioLevel, setAudioLevel] = useState(0)
@@ -24,7 +24,7 @@ export default function AudioVisualizer({ audioFile, isPlaying }: AudioVisualize
       try {
         const arrayBuffer = await audioFile.arrayBuffer()
         const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
-        const audioBuffer = await audioContext.decodeAudioData(arrayBuffer)
+        // const audioBuffer = await audioContext.decodeAudioData(arrayBuffer)
 
         const analyser = audioContext.createAnalyser()
         analyser.fftSize = 512

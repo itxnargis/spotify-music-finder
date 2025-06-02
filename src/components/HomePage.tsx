@@ -7,14 +7,19 @@ import AudioAnalyzer from "./AudioAnalyzer"
 import SpotifyPlayer from "./SpotifyPlayer"
 
 
-const MusicHeroSection = ({ onScanComplete }) => {
-  const [audioFile, setAudioFile] = useState(null)
-  const [analyzedSong, setAnalyzedSong] = useState(null)
+interface HomePageProps {
+  onScanComplete: (success: boolean) => void
+}
+
+
+const HomePage = ({ onScanComplete }: HomePageProps) => {
+  const [audioFile, setAudioFile] = useState<File | null>(null)
+  const [analyzedSong, setAnalyzedSong] = useState<{ title: string; subtitle: string; meta: object } | null>(null)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
 
   // Subtle mouse tracking for interactive effects
   useEffect(() => {
-    const handleMouseMove = (e) => {
+    const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({ 
         x: (e.clientX / window.innerWidth) * 100,
         y: (e.clientY / window.innerHeight) * 100
@@ -97,7 +102,7 @@ const MusicHeroSection = ({ onScanComplete }) => {
 
           {/* EXACT WORKING FUNCTIONALITY FROM ORIGINAL APP.JSX */}
               <div className="space-y-6 sm:space-y-8">
-                <AudioUploader setAudioFile={setAudioFile} />
+                <AudioUploader setAudioFile={(file: File) => setAudioFile(file)} />
                 
                 {/* AudioAnalyzer - Shows when file is uploaded, EXACT same as original */}
                 {audioFile && (
@@ -132,7 +137,7 @@ const MusicHeroSection = ({ onScanComplete }) => {
           {/* Action buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
             <button 
-              onClick={() => document.querySelector('input[type="file"]')?.click()}
+              onClick={() => (document.querySelector('input[type="file"]') as HTMLInputElement | null)?.click()}
               className="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-full text-lg font-medium transition-all duration-300 hover:scale-105 shadow-lg flex items-center justify-center gap-2"
             >
               <Volume2 className="w-5 h-5" />
@@ -211,4 +216,4 @@ const MusicHeroSection = ({ onScanComplete }) => {
   )
 }
 
-export default MusicHeroSection
+export default HomePage

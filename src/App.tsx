@@ -8,8 +8,8 @@ import { HelpCircle, Upload, Search, PlayCircle, TrendingUp } from 'lucide-react
 import ScanStats from "./components/ScanStats"
 import FileShareHandler from "./components/FileShareHandler"
 import TrendingTracks from "./components/TrendingTracks"
-import MusicHeroSection from "./components/Home"
 import { useAnalytics } from "./hooks/useAnalytics"
+import HomePage from "./components/HomePage"
 
 export default function App() {
   const [scanStats, setScanStats] = useState({ total: 0, successful: 0, failed: 0 })
@@ -49,7 +49,7 @@ export default function App() {
       <Header />
 
       {/* Hero Section with complete upload/analyze/play functionality */}
-      <MusicHeroSection onScanComplete={handleScanComplete} />
+      <HomePage onScanComplete={handleScanComplete} />
 
       <main className="flex-grow bg-gradient-to-br from-slate-900 via-gray-900 to-black">
         <div className="container mx-auto px-6 py-20 space-y-20">
