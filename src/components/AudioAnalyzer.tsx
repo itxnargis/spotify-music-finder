@@ -1,33 +1,49 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import axios from "axios"
 import toast from "react-hot-toast"
-import { Loader2, Zap, Music, Brain, AudioWaveformIcon as Waveform } from 'lucide-react'
+import { Loader2, Zap, Music, Brain, AudioWaveformIcon as Waveform, CheckCircle } from "lucide-react"
 
 interface AudioAnalyzerProps {
   audioFile: File
   setAnalyzedSong: (song: { title: string; subtitle: string; meta: object }) => void
   onScanComplete: (success: boolean) => void
+  autoStart?: boolean // New prop to control auto-start
 }
 
-export default function AudioAnalyzer({ audioFile, setAnalyzedSong, onScanComplete }: AudioAnalyzerProps) {
+export default function AudioAnalyzer({
+  audioFile,
+  setAnalyzedSong,
+  onScanComplete,
+  autoStart = false,
+}: AudioAnalyzerProps) {
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [progress, setProgress] = useState(0)
   const [currentStep, setCurrentStep] = useState("")
+
+  // Auto-start analysis when autoStart is true
+  useEffect(() => {
+    if (autoStart && audioFile && !isAnalyzing) {
+      // Small delay to show the upload confirmation
+      const timer = setTimeout(() => {
+        analyzeAudio()
+      }, 1000)
+      return () => clearTimeout(timer)
+    }
+  }, [autoStart, audioFile])
 
   const analyzeAudio = async () => {
     setIsAnalyzing(true)
     setProgress(0)
     setCurrentStep("Preparing audio...")
 
-    // Enhanced progress simulation with steps
     const steps = [
       { progress: 20, step: "Processing audio fingerprint..." },
       { progress: 40, step: "Analyzing frequency patterns..." },
       { progress: 60, step: "Matching with database..." },
       { progress: 80, step: "Identifying track..." },
-      { progress: 95, step: "Finalizing results..." }
+      { progress: 95, step: "Finalizing results..." },
     ]
 
     let stepIndex = 0
@@ -85,38 +101,40 @@ export default function AudioAnalyzer({ audioFile, setAnalyzedSong, onScanComple
 
   return (
     <div className="space-y-6">
-      <button
-        onClick={analyzeAudio}
-        disabled={isAnalyzing}
-        className="group relative w-full bg-gradient-to-r from-purple-600 via-pink-600 to-cyan-600 hover:from-purple-700 hover:via-pink-700 hover:to-cyan-700 disabled:from-slate-600 disabled:to-slate-700 text-white font-bold py-6 px-8 rounded-2xl transition-all duration-300 flex items-center justify-center space-x-4 transform hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed overflow-hidden"
-      >
-        {/* Animated background */}
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-600 via-pink-600 to-cyan-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-        
-        {/* Shimmer effect */}
-        <div className="absolute inset-0 -skew-x-12 bg-gradient-to-r from-transparent via-white/10 to-transparent group-hover:animate-shimmer"></div>
-        
-        <div className="relative flex items-center space-x-4">
-          {isAnalyzing ? (
-            <>
-              <div className="relative">
-                <Loader2 className="w-8 h-8 animate-spin" />
-                <div className="absolute inset-0 w-8 h-8 border-2 border-white/20 rounded-full animate-pulse"></div>
-              </div>
-              <span className="text-xl">Analyzing Audio...</span>
-            </>
-          ) : (
-            <>
-              <div className="relative">
-                <Zap className="w-8 h-8 group-hover:animate-bounce" />
-                <Brain className="absolute -top-1 -right-1 w-4 h-4 text-yellow-300 animate-pulse" />
-              </div>
-              <span className="text-xl">Analyze with AI</span>
-            </>
-          )}
-        </div>
-      </button>
+      {/* Manual analyze button - only show if not auto-starting */}
+      {!autoStart && (
+        <button
+          onClick={analyzeAudio}
+          disabled={isAnalyzing}
+          className="group relative w-full bg-gradient-to-r from-purple-600 via-pink-600 to-cyan-600 hover:from-purple-700 hover:via-pink-700 hover:to-cyan-700 disabled:from-slate-600 disabled:to-slate-700 text-white font-bold py-6 px-8 rounded-2xl transition-all duration-300 flex items-center justify-center space-x-4 transform hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed overflow-hidden"
+        >
+          <div className="absolute inset-0 bg-gradient-to-r from-purple-600 via-pink-600 to-cyan-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
+          <div className="absolute inset-0 -skew-x-12 bg-gradient-to-r from-transparent via-white/10 to-transparent group-hover:animate-shimmer"></div>
+
+          <div className="relative flex items-center space-x-4">
+            {isAnalyzing ? (
+              <>
+                <div className="relative">
+                  <Loader2 className="w-8 h-8 animate-spin" />
+                  <div className="absolute inset-0 w-8 h-8 border-2 border-white/20 rounded-full animate-pulse"></div>
+                </div>
+                <span className="text-xl">Analyzing Audio...</span>
+              </>
+            ) : (
+              <>
+                <div className="relative">
+                  <Zap className="w-8 h-8 group-hover:animate-bounce" />
+                  <Brain className="absolute -top-1 -right-1 w-4 h-4 text-yellow-300 animate-pulse" />
+                </div>
+                <span className="text-xl">Analyze with AI</span>
+              </>
+            )}
+          </div>
+        </button>
+      )}
+
+      {/* Analysis progress display */}
       {isAnalyzing && (
         <div className="relative animate-in slide-in-from-bottom-4 duration-500">
           <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl blur opacity-50 animate-pulse"></div>
@@ -135,8 +153,7 @@ export default function AudioAnalyzer({ audioFile, setAnalyzedSong, onScanComple
                 <div className="text-xs text-slate-400">Complete</div>
               </div>
             </div>
-            
-            {/* Enhanced progress bar */}
+
             <div className="relative w-full bg-slate-700 rounded-full h-3 mb-4 overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 animate-pulse"></div>
               <div
@@ -146,8 +163,7 @@ export default function AudioAnalyzer({ audioFile, setAnalyzedSong, onScanComple
                 <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent animate-shimmer"></div>
               </div>
             </div>
-            
-            {/* Processing indicators */}
+
             <div className="flex justify-between items-center text-xs text-slate-400">
               <span>Processing audio fingerprint</span>
               <span className="flex items-center space-x-1">
@@ -156,6 +172,19 @@ export default function AudioAnalyzer({ audioFile, setAnalyzedSong, onScanComple
                 <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse delay-200"></div>
               </span>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Success notification */}
+      {!isAnalyzing && progress === 100 && (
+        <div className="relative animate-in slide-in-from-bottom-4 duration-500">
+          <div className="bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-400/50 rounded-2xl p-6 backdrop-blur-sm text-center">
+            <div className="flex items-center justify-center space-x-3 mb-3">
+              <CheckCircle className="w-8 h-8 text-green-400 animate-bounce" />
+              <span className="text-xl font-bold text-green-300">Analysis Complete!</span>
+            </div>
+            <p className="text-gray-300">🎉 Your song has been identified. Check the results below!</p>
           </div>
         </div>
       )}

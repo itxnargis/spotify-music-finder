@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from 'react'
-import { Music, TrendingUp, Target } from 'lucide-react'
+import { Music, Target, TrendingUp } from 'lucide-react'
 
 interface ScanStatsProps {
   stats: {
@@ -16,7 +16,6 @@ export default function ScanStats({ stats }: ScanStatsProps) {
   
   const successRate = stats.total > 0 ? Math.round((stats.successful / stats.total) * 100) : 0
 
-  // Animate numbers on mount
   useEffect(() => {
     const duration = 1500
     const steps = 30
@@ -43,26 +42,31 @@ export default function ScanStats({ stats }: ScanStatsProps) {
   }, [stats])
 
   if (stats.total === 0) {
-    return null
+    return (
+      <div className="text-center py-12">
+        <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4">
+          <Music className="w-8 h-8 text-green-400" />
+        </div>
+        <h3 className="text-xl font-semibold text-white mb-2">Your Stats</h3>
+        <p className="text-gray-400">Upload your first audio file to see your recognition statistics</p>
+      </div>
+    )
   }
 
   return (
-    <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 space-y-6">
+    <div className="space-y-6">
       {/* Header */}
-      <div className="text-center space-y-2">
-        <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
-          <Music className="w-6 h-6 text-white" />
-        </div>
-        <h3 className="text-2xl font-bold text-white">Discovery Stats</h3>
-        <p className="text-gray-400">Your music recognition results</p>
+      <div className="text-center">
+        <h3 className="text-xl font-semibold text-white mb-2">Recognition Stats</h3>
+        <p className="text-gray-400 text-sm">Your music discovery performance</p>
       </div>
 
-      {/* Main Stats Grid */}
+      {/* Stats Grid */}
       <div className="grid grid-cols-3 gap-4">
         {[
           {
             icon: Music,
-            label: "Total",
+            label: "Total Scans",
             value: animatedStats.total,
             color: "text-blue-400"
           },
@@ -74,21 +78,19 @@ export default function ScanStats({ stats }: ScanStatsProps) {
           },
           {
             icon: TrendingUp,
-            label: "Success",
+            label: "Success Rate",
             value: `${successRate}%`,
             color: "text-purple-400"
           }
         ].map((stat, index) => (
-          <div key={index} className="text-center space-y-3">
-            <div className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center mx-auto">
+          <div key={index} className="text-center">
+            <div className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-3">
               <stat.icon className={`w-5 h-5 ${stat.color}`} />
             </div>
-            <div>
-              <p className="text-2xl font-bold text-white">
-                {typeof stat.value === 'number' ? stat.value.toLocaleString() : stat.value}
-              </p>
-              <p className="text-sm text-gray-400">{stat.label}</p>
-            </div>
+            <p className="text-xl font-bold text-white mb-1">
+              {typeof stat.value === 'number' ? stat.value.toLocaleString() : stat.value}
+            </p>
+            <p className="text-xs text-gray-400">{stat.label}</p>
           </div>
         ))}
       </div>
@@ -105,13 +107,6 @@ export default function ScanStats({ stats }: ScanStatsProps) {
             style={{ width: `${successRate}%` }}
           />
         </div>
-      </div>
-
-      {/* Simple Footer */}
-      <div className="text-center pt-4 border-t border-white/10">
-        <p className="text-sm text-gray-400">
-          {successRate >= 90 ? "Excellent" : successRate >= 70 ? "Good" : "Learning"} recognition performance
-        </p>
       </div>
     </div>
   )

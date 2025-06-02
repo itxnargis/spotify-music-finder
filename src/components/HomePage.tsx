@@ -1,58 +1,78 @@
 "use client"
 
-import { useState, useEffect } from 'react'
-import { Music, Upload, Search, PlayCircle, Volume2, Headphones } from 'lucide-react'
+import { useState, useEffect, useRef } from "react"
+import { Music, Upload, Search, PlayCircle, Volume2, Headphones, CheckCircle } from "lucide-react"
 import AudioUploader from "./AudioUploader"
 import AudioAnalyzer from "./AudioAnalyzer"
 import SpotifyPlayer from "./SpotifyPlayer"
-
 
 interface HomePageProps {
   onScanComplete: (success: boolean) => void
 }
 
-
 const HomePage = ({ onScanComplete }: HomePageProps) => {
   const [audioFile, setAudioFile] = useState<File | null>(null)
   const [analyzedSong, setAnalyzedSong] = useState<{ title: string; subtitle: string; meta: object } | null>(null)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+  const [isAnalyzing, setIsAnalyzing] = useState(false)
+  const [shouldAutoAnalyze, setShouldAutoAnalyze] = useState(false)
+  const resultsRef = useRef<HTMLDivElement>(null)
 
   // Subtle mouse tracking for interactive effects
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ 
+      setMousePosition({
         x: (e.clientX / window.innerWidth) * 100,
-        y: (e.clientY / window.innerHeight) * 100
+        y: (e.clientY / window.innerHeight) * 100,
       })
     }
 
-    window.addEventListener('mousemove', handleMouseMove)
-    return () => window.removeEventListener('mousemove', handleMouseMove)
+    window.addEventListener("mousemove", handleMouseMove)
+    return () => window.removeEventListener("mousemove", handleMouseMove)
   }, [])
 
-  // const getCurrentStatus = () => {
-  //   if (analyzedSong) return { text: "Found on Spotify!", color: "text-green-500", icon: CheckCircle }
-  //   if (audioFile) return { text: "Ready to analyze", color: "text-purple-500", icon: Search }
-  //   return { text: "Upload your audio file", color: "text-gray-400", icon: Upload }
-  // }
+  // Handle file upload and trigger auto-analysis
+  const handleFileUpload = (file: File) => {
+    setAudioFile(file)
+    setAnalyzedSong(null) // Reset previous results
+    setShouldAutoAnalyze(true)
+    setIsAnalyzing(true)
+  }
 
-  // const status = getCurrentStatus()
-  // const StatusIcon = status.icon
+  // Handle analysis completion
+  const handleScanComplete = (success: boolean) => {
+    setIsAnalyzing(false)
+    setShouldAutoAnalyze(false)
+    onScanComplete(success)
+
+    // Scroll to results if successful
+    if (success && resultsRef.current) {
+      setTimeout(() => {
+        resultsRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        })
+      }, 500)
+    }
+  }
 
   return (
-    <section className="relative bg-gradient-to-br from-slate-900 via-gray-900 to-black overflow-hidden py-10">
+    <section
+      id="home"
+      className="relative bg-gradient-to-br from-slate-900 via-gray-900 to-black overflow-hidden py-16 px-6 lg:px-8"
+    >
       {/* Subtle animated background elements */}
       <div className="absolute inset-0">
         {/* Gradient orbs */}
-        <div 
+        <div
           className="absolute w-96 h-96 bg-gradient-to-br from-green-500/10 to-green-600/5 rounded-full blur-3xl"
           style={{
             left: `${20 + mousePosition.x * 0.01}%`,
             top: `${15 + mousePosition.y * 0.01}%`,
-            transform: `scale(${1 + Math.sin(Date.now() * 0.001) * 0.1})`
+            transform: `scale(${1 + Math.sin(Date.now() * 0.001) * 0.1})`,
           }}
         />
-        <div 
+        <div
           className="absolute w-80 h-80 bg-gradient-to-br from-purple-500/8 to-blue-500/5 rounded-full blur-3xl"
           style={{
             right: `${10 + mousePosition.x * -0.008}%`,
@@ -80,105 +100,158 @@ const HomePage = ({ onScanComplete }: HomePageProps) => {
       </div>
 
       {/* Main Content */}
-        <div className="text-center max-w-4xl mx-auto py-20">
-          {/* Clean, professional heading */}
-          <div className="mb-8">
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6">
-              <span className="text-white">Spotify</span>
-              <br />
-              <span className="bg-gradient-to-r from-green-400 to-green-500 bg-clip-text text-transparent">
-                Music Finder
-              </span>
-            </h1>
-          </div>
+      <div className="text-center max-w-4xl mx-auto py-20">
+        {/* Clean, professional heading */}
+        <div className="mb-8">
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6">
+            <span className="text-white">Spotify</span>
+            <br />
+            <span className="bg-gradient-to-r from-green-400 to-green-500 bg-clip-text text-transparent">
+              Music Finder
+            </span>
+          </h1>
+        </div>
 
-          {/* Clear subtitle */}
-          <div className="mb-12">
-            <p className="text-xl md:text-2xl text-gray-300 leading-relaxed max-w-3xl mx-auto">
-              Have a song saved on your device and wondering if it's available on Spotify? 
-              Upload your audio file, analyze it, and discover its Spotify match effortlessly.
-            </p>
-          </div>
+        {/* Clear subtitle */}
+        <div className="mb-12">
+          <p className="text-xl md:text-2xl text-gray-200 leading-relaxed max-w-3xl mx-auto">
+            Have a song saved on your device and wondering if it's available on Spotify? Upload your audio file and
+            we'll automatically analyze it to find its Spotify match.
+          </p>
+        </div>
 
-          {/* EXACT WORKING FUNCTIONALITY FROM ORIGINAL APP.JSX */}
-              <div className="space-y-6 sm:space-y-8">
-                <AudioUploader setAudioFile={(file: File) => setAudioFile(file)} />
-                
-                {/* AudioAnalyzer - Shows when file is uploaded, EXACT same as original */}
-                {audioFile && (
-                  <AudioAnalyzer 
-                    audioFile={audioFile} 
-                    setAnalyzedSong={setAnalyzedSong} 
-                    onScanComplete={onScanComplete} 
-                  />
-                )}
-                
-                {/* SpotifyPlayer - Shows when song is analyzed, EXACT same as original */}
-                {analyzedSong && <SpotifyPlayer songName={analyzedSong} />}
-              </div>
-           
-          </div>
+        {/* Updated functionality with auto-analysis */}
+        <div className="space-y-6 sm:space-y-8">
+          <AudioUploader
+            setAudioFile={setAudioFile}
+            audioFile={audioFile}
+            isAnalyzing={isAnalyzing}
+            analyzedSong={analyzedSong}
+            onFileUpload={handleFileUpload}
+          />
 
-          {/* Action buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-            <button 
-              onClick={() => (document.querySelector('input[type="file"]') as HTMLInputElement | null)?.click()}
-              className="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-full text-lg font-medium transition-all duration-300 hover:scale-105 shadow-lg flex items-center justify-center gap-2"
-            >
-              <Volume2 className="w-5 h-5" />
-              Upload Audio File
-            </button>
-            
-            <button 
-              onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
-              className="bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-full text-lg font-medium transition-all duration-300 hover:scale-105 border border-white/20 flex items-center justify-center gap-2"
-            >
-              <Headphones className="w-5 h-5" />
-              How It Works
-            </button>
-          </div>
+          {/* AudioAnalyzer - Shows when file is uploaded with auto-start */}
+          {audioFile && shouldAutoAnalyze && (
+            <AudioAnalyzer
+              audioFile={audioFile}
+              setAnalyzedSong={setAnalyzedSong}
+              onScanComplete={handleScanComplete}
+              autoStart={true}
+            />
+          )}
 
-          {/* How it works steps */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-16">
-            {[
-              { 
-                icon: Upload, 
-                title: "1. Upload", 
-                desc: "Select your audio file from your device",
-                color: "text-blue-400"
-              },
-              { 
-                icon: Search, 
-                title: "2. Analyze", 
-                desc: "Our AI analyzes your audio and identifies the track",
-                color: "text-purple-400"
-              },
-              { 
-                icon: PlayCircle, 
-                title: "3. Discover", 
-                desc: "Get the Spotify link if the song is available",
-                color: "text-green-400"
-              }
-            ].map((step, index) => (
-              <div key={index} className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:border-white/20 transition-all duration-300">
-                <div className="flex flex-col items-center text-center">
-                  <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center mb-4">
-                    <step.icon className={`w-6 h-6 ${step.color}`} />
-                  </div>
-                  <h3 className="text-lg font-semibold text-white mb-2">{step.title}</h3>
-                  <p className="text-sm text-gray-400 leading-relaxed">{step.desc}</p>
+          {/* SpotifyPlayer - Shows when song is analyzed */}
+          {analyzedSong && (
+            <div ref={resultsRef} className="mt-12">
+              <div className="text-center mb-6">
+                <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-400/50 rounded-full px-6 py-3 backdrop-blur-sm">
+                  <CheckCircle className="w-5 h-5 text-green-400 animate-pulse" />
+                  <span className="text-green-300 font-semibold text-lg">🎉 Song Found on Spotify!</span>
                 </div>
               </div>
-            ))}
-          </div>
+              <SpotifyPlayer songName={analyzedSong} />
+            </div>
+          )}
+        </div>
+      </div>
 
-          {/* Simple trust indicator */}
-          <div className="pt-8 border-t border-white/10">
-            <p className="text-gray-400 text-sm">
-              Powered by advanced audio recognition technology
-            </p>
+      {/* Action buttons */}
+      <div className="flex flex-col sm:flex-row gap-6 justify-center mb-20">
+        <button
+          onClick={() => (document.querySelector('input[type="file"]') as HTMLInputElement | null)?.click()}
+          className="group relative bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 text-white px-10 py-4 rounded-2xl text-lg font-semibold transition-all duration-300 hover:scale-105 shadow-2xl overflow-hidden"
+        >
+          <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
+          <div className="relative flex items-center justify-center gap-3">
+            <Volume2 className="w-6 h-6" />
+            Upload Your Music
           </div>
-      
+        </button>
+
+        <button className="group relative bg-white/10 hover:bg-white/20 text-white px-10 py-4 rounded-2xl text-lg font-semibold transition-all duration-300 hover:scale-105 border border-white/20 hover:border-white/40 backdrop-blur-sm overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 via-purple-500/10 to-purple-500/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
+          <div className="relative flex items-center justify-center gap-3">
+            <Headphones className="w-6 h-6" />
+            How It Works
+          </div>
+        </button>
+      </div>
+
+      {/* How it works steps */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto mb-16">
+        {[
+          {
+            icon: Upload,
+            title: "Upload & Auto-Scan",
+            desc: "Drop your audio file and analysis starts automatically using AI fingerprinting",
+            color: "from-blue-400 to-cyan-400",
+            bgColor: "from-blue-500/20 to-cyan-500/20",
+            borderColor: "border-blue-400/30",
+          },
+          {
+            icon: Search,
+            title: "AI Recognition",
+            desc: "Advanced algorithms instantly match your track against millions of songs",
+            color: "from-purple-400 to-pink-400",
+            bgColor: "from-purple-500/20 to-pink-500/20",
+            borderColor: "border-purple-400/30",
+          },
+          {
+            icon: PlayCircle,
+            title: "Spotify Connect",
+            desc: "Get instant access to your discovered track on Spotify's platform",
+            color: "from-green-400 to-emerald-400",
+            bgColor: "from-green-500/20 to-emerald-500/20",
+            borderColor: "border-green-400/30",
+          },
+        ].map((step, index) => (
+          <div
+            key={index}
+            className={`group relative bg-gradient-to-br ${step.bgColor} backdrop-blur-xl rounded-2xl p-8 border ${step.borderColor} hover:border-opacity-60 transition-all duration-500 hover:scale-105 cursor-pointer`}
+            style={{
+              animationDelay: `${index * 200}ms`,
+            }}
+          >
+            {/* Hover glow effect */}
+            <div
+              className={`absolute inset-0 bg-gradient-to-br ${step.bgColor} rounded-2xl blur-xl opacity-0 group-hover:opacity-50 transition-opacity duration-500 -z-10`}
+            ></div>
+
+            <div className="flex flex-col items-center text-center">
+              <div
+                className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${step.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg`}
+              >
+                <step.icon className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-4">{step.title}</h3>
+              <p className="text-gray-300 leading-relaxed">{step.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Simple trust indicator */}
+      <div className="pt-12 border-t border-white/10 max-w-4xl mx-auto text-center">
+        <div className="flex flex-col items-center space-y-4">
+          <div className="flex items-center space-x-6">
+            <div className="flex items-center space-x-2">
+              <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+              <span className="text-green-400 font-medium">AI-Powered</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-3 h-3 bg-blue-400 rounded-full animate-pulse" style={{ animationDelay: "0.5s" }}></div>
+              <span className="text-blue-400 font-medium">Auto-Analysis</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-3 h-3 bg-purple-400 rounded-full animate-pulse" style={{ animationDelay: "1s" }}></div>
+              <span className="text-purple-400 font-medium">Privacy First</span>
+            </div>
+          </div>
+          <p className="text-gray-400 text-sm max-w-2xl">
+            Powered by cutting-edge audio recognition technology with 99.7% accuracy rate
+          </p>
+        </div>
+      </div>
 
       {/* Custom animations */}
       <style>{`

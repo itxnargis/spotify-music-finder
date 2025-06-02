@@ -4,16 +4,18 @@ import { useState, useEffect } from "react"
 import { Toaster } from "react-hot-toast"
 import Header from "./components/Header"
 import Footer from "./components/Footer"
-import { HelpCircle, Upload, Search, PlayCircle, TrendingUp } from 'lucide-react'
+import { HelpCircle, Upload, Search, PlayCircle, TrendingUp, BarChart3, Share2 } from 'lucide-react'
 import ScanStats from "./components/ScanStats"
 import FileShareHandler from "./components/FileShareHandler"
 import TrendingTracks from "./components/TrendingTracks"
 import { useAnalytics } from "./hooks/useAnalytics"
 import HomePage from "./components/HomePage"
+import FeaturesSection from "./components/Features"
 
 export default function App() {
   const [scanStats, setScanStats] = useState({ total: 0, successful: 0, failed: 0 })
   const [mounted, setMounted] = useState(false)
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const { trackPageView, trackEvent } = useAnalytics()
 
   useEffect(() => {
@@ -23,6 +25,19 @@ export default function App() {
     if (storedStats) {
       setScanStats(JSON.parse(storedStats))
     }
+  }, [])
+
+  // Mouse tracking for subtle animations
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({ 
+        x: (e.clientX / window.innerWidth) * 100,
+        y: (e.clientY / window.innerHeight) * 100
+      })
+    }
+
+    window.addEventListener('mousemove', handleMouseMove)
+    return () => window.removeEventListener('mousemove', handleMouseMove)
   }, [])
 
   const handleScanComplete = (success: boolean) => {
@@ -39,7 +54,10 @@ export default function App() {
   if (!mounted) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-black flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-green-500"></div>
+        <div className="relative">
+          <div className="w-16 h-16 border-4 border-green-500/20 border-t-green-500 rounded-full animate-spin"></div>
+          <div className="absolute inset-0 w-16 h-16 border-4 border-transparent border-r-green-400/40 rounded-full animate-spin animation-delay-150"></div>
+        </div>
       </div>
     )
   }
@@ -48,73 +66,138 @@ export default function App() {
     <div className="flex flex-col min-h-screen">
       <Header />
 
-      {/* Hero Section with complete upload/analyze/play functionality */}
+      {/* Hero Section */}
       <HomePage onScanComplete={handleScanComplete} />
 
-      <main className="flex-grow bg-gradient-to-br from-slate-900 via-gray-900 to-black">
-        <div className="container mx-auto px-6 py-20 space-y-20">
+      {/* Main Content */}
+      <main className="flex-grow bg-gradient-to-br from-slate-900 via-gray-900 to-black relative overflow-hidden">
+        {/* Subtle background elements */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div 
+            className="absolute w-96 h-96 bg-gradient-to-br from-purple-500/5 to-blue-500/5 rounded-full blur-3xl"
+            style={{
+              left: `${60 + mousePosition.x * 0.01}%`,
+              top: `${70 + mousePosition.y * 0.01}%`,
+            }}
+          />
+          <div 
+            className="absolute w-80 h-80 bg-gradient-to-br from-green-500/5 to-teal-500/5 rounded-full blur-3xl"
+            style={{
+              left: `${10 + mousePosition.x * -0.005}%`,
+              top: `${40 + mousePosition.y * -0.005}%`,
+            }}
+          />
+        </div>
+
+        <div className="relative container mx-auto px-6 py-20 space-y-32">
           
           {/* Trending Section */}
           <section className="max-w-6xl mx-auto">
-            <div className="text-center mb-12">
-              <div className="flex items-center justify-center gap-3 mb-4">
-                <TrendingUp className="w-8 h-8 text-green-400" />
-                <h2 className="text-3xl font-bold text-white">Trending Now</h2>
+            <div className="text-center mb-16">
+              <div className="inline-flex items-center gap-3 bg-white/5 backdrop-blur-sm rounded-full px-6 py-3 border border-white/10 mb-6">
+                <TrendingUp className="w-5 h-5 text-green-400" />
+                <span className="text-sm font-medium text-gray-300">What's Hot</span>
               </div>
-              <p className="text-lg text-gray-300 max-w-2xl mx-auto">Discover what's popular on Spotify right now</p>
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+                Trending Now
+              </h2>
+              <p className="text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
+                Discover what's popular on Spotify right now
+              </p>
             </div>
-            <TrendingTracks />
-          </section>
-
-          {/* Stats & Share Grid */}
-          <section className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8">
-            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
-              <ScanStats stats={scanStats} />
-            </div>
-            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
-              <FileShareHandler />
+            <div className="bg-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/10">
+              <TrendingTracks />
             </div>
           </section>
 
-          {/* How It Works */}
-          <section id="how-it-works" className="max-w-5xl mx-auto">
-            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 md:p-12 border border-white/10">
-              <div className="text-center mb-12">
-                <div className="flex items-center justify-center gap-3 mb-4">
-                  <HelpCircle className="w-8 h-8 text-blue-400" />
-                  <h2 className="text-3xl font-bold text-white">How It Works</h2>
+          {/* Stats & Share Section */}
+          <section className="max-w-6xl mx-auto">
+            <div className="text-center mb-16">
+              <div className="inline-flex items-center gap-3 bg-white/5 backdrop-blur-sm rounded-full px-6 py-3 border border-white/10 mb-6">
+                <BarChart3 className="w-5 h-5 text-purple-400" />
+                <span className="text-sm font-medium text-gray-300">Your Activity</span>
+              </div>
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+                Track Your Progress
+              </h2>
+              <p className="text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
+                View your scan statistics and share your audio files with ease
+              </p>
+            </div>
+
+            <div className="grid lg:grid-cols-2 gap-8">
+              <div className="bg-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/10 hover:border-white/20 transition-all duration-300">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center">
+                    <BarChart3 className="w-5 h-5 text-purple-400" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-white">Scan Statistics</h3>
                 </div>
-                <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-                  Three simple steps to discover your music on Spotify
-                </p>
+                <ScanStats stats={scanStats} />
               </div>
+              
+              <div className="bg-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/10 hover:border-white/20 transition-all duration-300">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center">
+                    <Share2 className="w-5 h-5 text-blue-400" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-white">Share Files</h3>
+                </div>
+                <FileShareHandler />
+              </div>
+            </div>
+          </section>
 
-              <div className="grid md:grid-cols-3 gap-8">
+          {/* How It Works Section */}
+          <section id="how-it-works" className="max-w-6xl mx-auto">
+            <div className="text-center mb-16">
+              <div className="inline-flex items-center gap-3 bg-white/5 backdrop-blur-sm rounded-full px-6 py-3 border border-white/10 mb-6">
+                <HelpCircle className="w-5 h-5 text-blue-400" />
+                <span className="text-sm font-medium text-gray-300">How It Works</span>
+              </div>
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+                Simple & Powerful
+              </h2>
+              <p className="text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
+                Three simple steps to discover your music on Spotify
+              </p>
+            </div>
+
+            <div className="bg-white/5 backdrop-blur-sm rounded-3xl p-12 border border-white/10">
+              <div className="grid md:grid-cols-3 gap-12">
                 {[
                   {
                     icon: Upload,
                     title: "Upload",
-                    description: "Select your audio file from your device",
+                    description: "Select your audio file from your device. We support all major audio formats.",
                     color: "purple-400",
+                    bgColor: "purple-500/20",
                   },
                   {
                     icon: Search,
                     title: "Analyze",
-                    description: "AI identifies your song using audio fingerprinting",
+                    description: "Our AI identifies your song using advanced audio fingerprinting technology.",
                     color: "blue-400",
+                    bgColor: "blue-500/20",
                   },
                   {
                     icon: PlayCircle,
                     title: "Discover",
-                    description: "Find the track on Spotify and explore more",
+                    description: "Find the track on Spotify and explore similar music recommendations.",
                     color: "green-400",
+                    bgColor: "green-500/20",
                   },
                 ].map((step, index) => (
-                  <div key={index} className="text-center">
-                    <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-white/10 border border-white/20 flex items-center justify-center">
+                  <div key={index} className="text-center group">
+                    <div className={`w-20 h-20 mx-auto mb-6 rounded-2xl bg-${step.bgColor} border border-white/10 flex items-center justify-center group-hover:scale-110 transition-all duration-300`}>
                       <step.icon className={`w-8 h-8 text-${step.color}`} />
                     </div>
-                    <h3 className="text-xl font-bold text-white mb-3">{step.title}</h3>
+                    <div className="mb-4">
+                      <span className="inline-block px-3 py-1 bg-white/10 rounded-full text-sm font-medium text-gray-300 mb-3">
+                        Step {index + 1}
+                      </span>
+                    </div>
+                    <h3 className="text-2xl font-bold text-white mb-4">{step.title}</h3>
                     <p className="text-gray-300 leading-relaxed">{step.description}</p>
                   </div>
                 ))}
@@ -122,36 +205,9 @@ export default function App() {
             </div>
           </section>
 
-          {/* Features */}
-          <section className="max-w-6xl mx-auto">
-            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 md:p-12 border border-white/10">
-              <div className="text-center mb-12">
-                <h2 className="text-3xl font-bold text-white mb-4">Why Choose Our Platform?</h2>
-                <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-                  Advanced features designed for music discovery
-                </p>
-              </div>
-
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {[
-                  { icon: "🎵", title: "Instant Recognition", desc: "99% accuracy with advanced AI technology" },
-                  { icon: "🔥", title: "Trending Tracks", desc: "Real-time updates on what's hot on Spotify" },
-                  { icon: "🎨", title: "Audio Visualization", desc: "Stunning real-time music visualizations" },
-                  { icon: "🎯", title: "Smart Discovery", desc: "AI-powered music recommendations" },
-                  { icon: "📊", title: "Track Statistics", desc: "Monitor your music discovery journey" },
-                  { icon: "🚀", title: "Lightning Fast", desc: "Instant results with seamless experience" },
-                ].map((feature, index) => (
-                  <div
-                    key={index}
-                    className="p-6 rounded-xl bg-white/5 border border-white/10 hover:border-white/20 transition-all duration-300 hover:scale-105"
-                  >
-                    <div className="text-2xl mb-4">{feature.icon}</div>
-                    <h3 className="text-lg font-bold text-white mb-2">{feature.title}</h3>
-                    <p className="text-gray-300 text-sm leading-relaxed">{feature.desc}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
+          {/* Features Section */}
+          <section id="features" className="max-w-6xl mx-auto">
+            <FeaturesSection />
           </section>
         </div>
       </main>
@@ -160,13 +216,14 @@ export default function App() {
         position="bottom-center"
         toastOptions={{
           style: {
-            background: "rgba(15, 23, 42, 0.9)",
-            backdropFilter: "blur(16px)",
+            background: "rgba(15, 23, 42, 0.95)",
+            backdropFilter: "blur(20px)",
             color: "white",
             border: "1px solid rgba(255, 255, 255, 0.1)",
-            borderRadius: "12px",
+            borderRadius: "16px",
             fontSize: "14px",
-            padding: "12px 16px",
+            padding: "14px 18px",
+            boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
           },
           success: {
             iconTheme: {
@@ -184,6 +241,13 @@ export default function App() {
       />
 
       <Footer id="footer" />
+
+      {/* Custom animations */}
+      <style>{`
+        .animation-delay-150 {
+          animation-delay: 150ms;
+        }
+      `}</style>
     </div>
   )
 }
