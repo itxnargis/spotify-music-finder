@@ -22,7 +22,7 @@ export default function AudioVisualizer({ audioFile, isPlaying }: AudioVisualize
       if (!audioFile || !canvasRef.current) return
 
       try {
-        const arrayBuffer = await audioFile.arrayBuffer()
+        // const arrayBuffer = await audioFile.arrayBuffer()
         const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
         // const audioBuffer = await audioContext.decodeAudioData(arrayBuffer)
 

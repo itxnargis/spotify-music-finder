@@ -1,7 +1,7 @@
 "use client"
 
-import React, { useState, useEffect } from 'react'
-import { Music, Upload, Search, PlayCircle, Volume2, Headphones, CheckCircle, Clock } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Music, Upload, Search, PlayCircle, Volume2, Headphones, CheckCircle } from 'lucide-react'
 import AudioUploader from "./AudioUploader"
 import AudioAnalyzer from "./AudioAnalyzer"
 import SpotifyPlayer from "./SpotifyPlayer"
@@ -37,7 +37,7 @@ const HomePage = ({ onScanComplete }: HomePageProps) => {
   }
 
   const status = getCurrentStatus()
-  const StatusIcon = status.icon
+  // const StatusIcon = status.icon
 
   return (
     <section className="relative bg-gradient-to-br from-slate-900 via-gray-900 to-black overflow-hidden py-10">
