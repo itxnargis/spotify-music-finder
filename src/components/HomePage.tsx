@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from 'react'
-import { Music, Upload, Search, PlayCircle, Volume2, Headphones, CheckCircle } from 'lucide-react'
+import { Music, Upload, Search, PlayCircle, Volume2, Headphones } from 'lucide-react'
 import AudioUploader from "./AudioUploader"
 import AudioAnalyzer from "./AudioAnalyzer"
 import SpotifyPlayer from "./SpotifyPlayer"
@@ -30,13 +30,13 @@ const HomePage = ({ onScanComplete }: HomePageProps) => {
     return () => window.removeEventListener('mousemove', handleMouseMove)
   }, [])
 
-  const getCurrentStatus = () => {
-    if (analyzedSong) return { text: "Found on Spotify!", color: "text-green-500", icon: CheckCircle }
-    if (audioFile) return { text: "Ready to analyze", color: "text-purple-500", icon: Search }
-    return { text: "Upload your audio file", color: "text-gray-400", icon: Upload }
-  }
+  // const getCurrentStatus = () => {
+  //   if (analyzedSong) return { text: "Found on Spotify!", color: "text-green-500", icon: CheckCircle }
+  //   if (audioFile) return { text: "Ready to analyze", color: "text-purple-500", icon: Search }
+  //   return { text: "Upload your audio file", color: "text-gray-400", icon: Upload }
+  // }
 
-  const status = getCurrentStatus()
+  // const status = getCurrentStatus()
   // const StatusIcon = status.icon
 
   return (
@@ -118,21 +118,6 @@ const HomePage = ({ onScanComplete }: HomePageProps) => {
               </div>
            
           </div>
-
-          {/* Status display */}
-          {/* <div className="mb-8 space-y-3">
-            <div className="flex items-center justify-center gap-2">
-              <StatusIcon className={`w-5 h-5 ${status.color}`} />
-              <span className={`text-lg font-medium ${status.color}`}>
-                {status.text}
-              </span>
-            </div>
-            {audioFile && (
-              <div className="text-sm text-gray-400 truncate max-w-sm mx-auto">
-                {audioFile.name}
-              </div>
-            )}
-          </div> */}
 
           {/* Action buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
