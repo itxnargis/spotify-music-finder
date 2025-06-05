@@ -1,9 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import axios from "axios"
-import toast from "react-hot-toast"
-import { ExternalLink, Play, Pause, Heart, Share2, Clock, Users } from 'lucide-react'
+import { ExternalLink, Play, Pause, Heart, Share2, Clock, Users, Calendar } from 'lucide-react'
 
 interface Artist {
   name: string | undefined
@@ -40,21 +38,23 @@ export default function SpotifyPlayer({ songName, onPlayStateChange }: SpotifyPl
 
   const getSpotifyToken = async () => {
     try {
-      const response = await axios.post(
+      const response = await fetch(
         "https://accounts.spotify.com/api/token",
-        new URLSearchParams({
-          grant_type: "client_credentials",
-        }),
         {
+          method: "POST",
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
             Authorization: `Basic ${btoa(
               `${import.meta.env.VITE_SPOTIFY_CLIENT_ID}:${import.meta.env.VITE_SPOTIFY_CLIENT_SECRET}`,
             )}`,
           },
-        },
+          body: new URLSearchParams({
+            grant_type: "client_credentials",
+          }),
+        }
       )
-      return response.data.access_token
+      const data = await response.json()
+      return data.access_token
     } catch (error) {
       console.error("Error fetching Spotify token:", error)
       return null
@@ -71,15 +71,15 @@ export default function SpotifyPlayer({ songName, onPlayStateChange }: SpotifyPl
       }
 
       try {
-        const response = await axios.get("https://api.spotify.com/v1/search", {
-          params: { q: `${songName.title} ${songName.subtitle}`, type: "track", limit: 5 },
+        const response = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(`${songName.title} ${songName.subtitle}`)}&type=track&limit=5`, {
           headers: { Authorization: `Bearer ${token}` },
         })
 
-        const tracks: Track[] = response.data.tracks.items
+        const data = await response.json()
+        const tracks: Track[] = data.tracks.items
 
         if (tracks.length === 0) {
-          toast.error("No tracks found on Spotify")
+          console.error("No tracks found on Spotify")
           setLoading(false)
           return
         }
@@ -101,7 +101,6 @@ export default function SpotifyPlayer({ songName, onPlayStateChange }: SpotifyPl
         setTrack(matchedTrack || tracks[0])
       } catch (error) {
         console.error("Error searching Spotify:", error)
-        toast.error("Error searching Spotify")
       } finally {
         setLoading(false)
       }
@@ -112,7 +111,7 @@ export default function SpotifyPlayer({ songName, onPlayStateChange }: SpotifyPl
 
   const togglePlayback = () => {
     if (!track?.preview_url) {
-      toast.error("No preview available for this track")
+      console.error("No preview available for this track")
       return
     }
 
@@ -158,7 +157,7 @@ export default function SpotifyPlayer({ songName, onPlayStateChange }: SpotifyPl
       }
     } else if (track) {
       navigator.clipboard.writeText(track.external_urls.spotify)
-      toast.success('Spotify link copied to clipboard!')
+      console.log('Spotify link copied to clipboard!')
     }
   }
 
@@ -196,10 +195,24 @@ export default function SpotifyPlayer({ songName, onPlayStateChange }: SpotifyPl
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-3xl mx-auto p-6">
+      {/* Spotify Embed */}
+      <div className="relative">
+        <div className="relative bg-slate-900/50 rounded-2xl p-4">
+          <iframe
+            src={`https://open.spotify.com/embed/track/${track.id}?utm_source=generator&theme=0`}
+            width="100%"
+            height="152"
+            frameBorder="0"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"
+            className="rounded-xl"
+          ></iframe>
+        </div>
+      </div>
+
       {/* Main Track Card */}
       <div className="relative group">
-        <div className="absolute -inset-0.5 bg-gradient-to-r from-green-600 via-emerald-600 to-teal-600 rounded-2xl blur opacity-50 group-hover:opacity-75 transition-opacity duration-300"></div>
         <div className="relative bg-slate-900/90 backdrop-blur-xl rounded-2xl p-8 border border-green-500/20">
           <div className="flex items-center space-x-6">
             {/* Album Art */}
@@ -215,33 +228,17 @@ export default function SpotifyPlayer({ songName, onPlayStateChange }: SpotifyPl
             </div>
 
             {/* Track Info */}
-            <div className="flex-1 space-y-2">
-              <h3 className="text-2xl font-bold text-white group-hover:text-green-300 transition-colors duration-300">
+            <div className="flex-1 min-w-0">
+              <h3 className="font-semibold text-white text-lg truncate">
                 {track.name}
               </h3>
-              <p className="text-green-300 text-lg font-medium">
+              <p className="text-gray-300 truncate">
                 {track.artists?.map((artist) => artist.name).join(", ")}
               </p>
-              <p className="text-slate-400">{track.album.name}</p>
-              
-              {/* Track Stats */}
-              <div className="flex items-center space-x-4 text-sm text-slate-400">
-                <div className="flex items-center space-x-1">
-                  <Clock className="w-4 h-4" />
-                  <span>{formatDuration(track.duration_ms)}</span>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <Users className="w-4 h-4" />
-                  <span>{track.popularity}% popularity</span>
-                </div>
-                <div className="text-xs bg-slate-700/50 px-2 py-1 rounded">
-                  {new Date(track.album.release_date).getFullYear()}
-                </div>
-              </div>
             </div>
 
             {/* Action Buttons */}
-            <div className="flex flex-col space-y-3">
+            <div className="flex items-center gap-2">
               {track.preview_url && (
                 <button
                   onClick={togglePlayback}
@@ -254,51 +251,47 @@ export default function SpotifyPlayer({ songName, onPlayStateChange }: SpotifyPl
                   )}
                 </button>
               )}
-              
+
               <button
                 onClick={() => setLiked(!liked)}
-                className={`p-4 rounded-full transition-all duration-200 hover:scale-110 ${
-                  liked 
-                    ? 'bg-red-500 hover:bg-red-600 text-white shadow-lg hover:shadow-red-500/25' 
-                    : 'bg-slate-700 hover:bg-slate-600 text-slate-300'
-                }`}
+                className={`p-3 rounded-full transition-colors ${liked ? "text-red-500 hover:bg-red-500/10" : "text-gray-400 hover:text-red-400 hover:bg-gray-800/50"
+                  }`}
               >
                 <Heart className={`w-6 h-6 ${liked ? 'fill-current' : ''}`} />
               </button>
-              
+
               <button
                 onClick={handleShare}
-                className="bg-slate-700 hover:bg-slate-600 text-slate-300 rounded-full p-4 transition-all duration-200 hover:scale-110"
+                className="p-3 rounded-full text-gray-400 hover:text-blue-400 hover:bg-gray-800/50 transition-colors"
               >
                 <Share2 className="w-6 h-6" />
               </button>
-              
+
               <a
                 href={track.external_urls.spotify}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-green-600 hover:bg-green-700 text-white rounded-full p-4 transition-all duration-200 hover:scale-110 shadow-lg hover:shadow-green-600/25"
+                className="p-3 rounded-full text-green-400 hover:text-green-300 hover:bg-gray-800/50 transition-colors"
               >
                 <ExternalLink className="w-6 h-6" />
               </a>
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* Spotify Embed */}
-      <div className="relative">
-        <div className="absolute -inset-0.5 bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl blur opacity-30"></div>
-        <div className="relative bg-slate-900/50 rounded-2xl p-4 border border-green-500/20">
-          <iframe
-            src={`https://open.spotify.com/embed/track/${track.id}?utm_source=generator&theme=0`}
-            width="100%"
-            height="152"
-            frameBorder="0"
-            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-            loading="lazy"
-            className="rounded-xl"
-          ></iframe>
+          {/* Track Stats */}
+          <div className="flex items-center gap-6 mt-8 border-t border-gray-700 pt-4">
+            <div className="flex items-center gap-1.5 text-sm text-gray-300 hover:text-gray-100">
+              <Clock className="w-4 h-4" />
+              <span>{formatDuration(track.duration_ms)}</span>
+            </div>
+            <div className="flex items-center gap-1.5 text-sm text-gray-300 hover:text-gray-100">
+              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              <span>{track.popularity}% popularity</span>
+            </div>
+            <div className="flex items-center gap-1.5 text-sm text-gray-300 hover:text-gray-100">
+              <Calendar className="w-4 h-4" />
+              <span>{new Date(track.album.release_date).getFullYear()}</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
