@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { ExternalLink, Play, Pause, Heart, Share2, Clock, Users, Calendar } from 'lucide-react'
+import { ExternalLink, Play, Pause, Heart, Share2, Clock, Calendar } from 'lucide-react'
 
 interface Artist {
   name: string | undefined
