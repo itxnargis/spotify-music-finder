@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://spotify-music-finder-inky.vercel.app/sitemap.xml
