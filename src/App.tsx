@@ -1,4 +1,3 @@
-"use client"
 
 import { useState, useEffect } from "react"
 import { Toaster } from "react-hot-toast"
@@ -12,17 +11,16 @@ import { useAnalytics } from "./hooks/useAnalytics"
 import HomePage from "./components/HomePage"
 import FeaturesSection from "./components/Features"
 
-// SEO and performance constants
 const SITE_CONFIG = {
   title: "Spotify Music Finder - AI-Powered Audio Recognition Tool",
   description: "Upload any audio file and instantly find it on Spotify. Our AI-powered music recognition technology identifies songs with 99.7% accuracy. Free, fast, and secure.",
-  url: "https://your-domain.com", // Replace with your actual domain
-  image: "https://your-domain.com/og-image.jpg", // Replace with your actual OG image
+   url: "https://spotify-music-finder-inky.vercel.app",
+  image:
+    "https://spotify-music-finder-inky.vercel.app/spotify-image.png",
   siteName: "Spotify Music Finder",
-  twitterHandle: "@yourhandle" // Replace with your Twitter handle
+  twitterHandle: "https://x.com/NargisKhat69350" 
 }
 
-// JSON-LD Schema for SEO
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
@@ -60,7 +58,6 @@ export default function App() {
     setMounted(true)
     trackPageView("Home")
     
-    // Use in-memory storage instead of localStorage for better performance
     const storedStats = sessionStorage.getItem("scanStats")
     if (storedStats) {
       try {
@@ -71,7 +68,6 @@ export default function App() {
     }
   }, [])
 
-  // Optimized mouse tracking with throttling
   useEffect(() => {
     let rafId: number
     
@@ -110,7 +106,6 @@ export default function App() {
     trackEvent(success ? "Successful Scan" : "Failed Scan")
   }
 
-  // Loading screen with better accessibility
   if (!mounted) {
     return (
       <div 
